@@ -24,20 +24,27 @@ public class UserController {
     }
 
     @GetMapping("/register")
-    public String showRegister() {
+    public String showRegister(HttpSession session) {
+        if (session.getAttribute("username") != null) {
+            return "redirect:/home";
+        }
         return "register";
     }
 
     @PostMapping("/register")
-    public String register(@RequestParam String username, @RequestParam String password, Model model) {
+    public String register(@RequestParam String username, @RequestParam String password, Model model, HttpSession session) {
         userService.createUser(username, password);
         System.out.println(username + " Has been created " + userService.getAllUsers());
         model.addAttribute("message", username + " Has been created " + userService.getAllUsers());
-        return "register";
+        session.setAttribute("username", username);
+        return "redirect:/home";
     }
 
     @GetMapping("/login")
-    public String showLoginPage() {
+    public String showLoginPage(HttpSession session) {
+        if (session.getAttribute("username") != null) {
+            return "redirect:/home";
+        }
         return "login";
     }
 
