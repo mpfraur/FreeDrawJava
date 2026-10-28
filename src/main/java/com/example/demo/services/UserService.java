@@ -14,8 +14,7 @@ public class UserService {
     private final UserRepository userRepository = new UserRepositoryImpl();
 
     public User createUser(String username, String password) {
-        if (userRepository.getAllUsers().stream()
-                .anyMatch(user -> user.getUsername().equals(username))) {
+        if (doesUserExist(username)) {
             throw new IllegalArgumentException("Username already exists");
         }
 
@@ -27,14 +26,21 @@ public class UserService {
         return userRepository.getAllUsers();
     }
 
+    public boolean doesUserExist(String username) {
+        return userRepository.getAllUsers().stream().anyMatch(existingUser -> existingUser.getUsername().equals(username));
+    }
+
     public boolean authenticated(String username, String password) {
         User user;
-        if (userRepository.getAllUsers().stream()
-                .anyMatch(user -> user.getUsername().equals(username))) {
-            // you have
-            throw new IllegalArgumentException("Username already exists");
+        User fetchedUser;
+
+        if (!doesUserExist(username)) {
+            return false;
+        } else {
+            user = new User(username, password);
+            fetchedUser = userRepository.getAllUsersHashMap().get(user.getUsername());
         }
 
-        return false;
+        return fetchedUser != null && user.getPassword().equals(fetchedUser.getPassword());
     }
 }

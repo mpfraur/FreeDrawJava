@@ -41,9 +41,30 @@ public class UserController {
         return "login";
     }
 
+    @GetMapping("/home")
+    public String showHomePage(HttpSession session) {
+        if (session.getAttribute("username") == null) {
+            return "redirect:/login";
+        }
+        return "home";
+    }
+
     @PostMapping("/login")
-    public String loginPost(@RequestParam String username, @RequestParam String password) {
+    public String loginPost(@RequestParam String username, @RequestParam String password, Model model, HttpSession session) {
+        if (userService.authenticated(username, password)) {
+            session.setAttribute("username", username);
+            return "redirect:/home";
+        } else {
+            model.addAttribute("message", "Password or Username Incorrect");
+        }
         return "login";
     }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/login";
+    }
+
 
 }

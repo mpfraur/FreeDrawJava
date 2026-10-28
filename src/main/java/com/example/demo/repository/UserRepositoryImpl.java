@@ -37,4 +37,8 @@ public class UserRepositoryImpl implements UserRepository {
     public boolean contains(String username) {
         return repository.containsKey(username);
     }
+    @Override
+    public Map<String, User> getAllUsersHashMap() {
+        return new HashMap<>(repository);
+    }
 }
