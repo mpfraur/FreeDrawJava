@@ -1,12 +1,17 @@
 package com.example.demo.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class User {
     String username;
     String password;
+    List<Drawings> drawingsList;
 
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+        drawingsList = new ArrayList<>();
     }
 
     public String getUsername() {

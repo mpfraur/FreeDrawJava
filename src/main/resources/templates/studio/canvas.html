@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<h1>Canva</h1>
+<canvas id="canvas" width="800" height="600" style="border: 2px solid black;"></canvas>
+
+</canvas>
+<div id="controls" style="border: 2px solid black;">
+    <select id="shapeOption">
+        <option value="square">Square</option>
+        <option value="circle">Circle</option>
+        <option value="triangle">Triangle</option>
+    </select>
+    <input type="range" min="1" max="100" value="10" id="sizeOfShape">
+    <input type="color" value="#ff0000" id="color">
+    <input type="checkbox" id="isFilledToggle">
+    <input type="checkbox" id="IsFreeDrawMode">
+    <input type="range" min="1" max="100" value="10" id="strokeValue">
+
+</div>
+
+
+<div>
+    <form method="post" action="/save">
+        <input type="hidden" name="dibuix" id="hiddenInput">
+
+        <input type="submit">
+    </form>
+
+</div>
+
+
+<ul id="Board">
+
+</ul>
+<script src="script.js"></script>
+</body>
+</html>
