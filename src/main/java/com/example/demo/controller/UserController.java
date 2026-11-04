@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
 
+import com.example.demo.model.Drawings;
+import com.example.demo.model.User;
 import com.example.demo.services.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.ArrayList;
 
 
 @Controller
@@ -49,10 +53,12 @@ public class UserController {
     }
 
     @GetMapping("/home")
-    public String showHomePage(HttpSession session) {
+    public String showHomePage(HttpSession session, Model model) {
         if (session.getAttribute("username") == null) {
             return "redirect:/login";
         }
+        User user = userService.getUserByUsername((String) session.getAttribute("username"));
+        model.addAttribute("drawingsList", user.getDrawingList());
         return "home";
     }
 
@@ -72,6 +78,34 @@ public class UserController {
         session.invalidate();
         return "redirect:/login";
     }
+
+    @PostMapping("/home")
+    public String createNewDrawingController(@RequestParam String drawingName, HttpSession session, Model model) {
+        String username = (String) session.getAttribute("username");
+        User user = userService.getUserByUsername(username);
+
+        if (user == null) {
+            model.addAttribute("message", "Error message");
+        } else {
+            userService.createNewDrawing(user, new Drawings(user, new ArrayList<>(), drawingName));
+        }
+        System.out.println(userService.getUserByUsername(username));
+
+        return "redirect:/home";
+    }
+
+    @PostMapping("/home/delete")
+    public String deleteDrawingController(@RequestParam int drawingID, HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        User user = userService.getUserByUsername(username);
+        if (user != null) {
+            userService.deleteDrawing(user, drawingID);
+        }
+        return "redirect:/home";
+    }
+
+
+
 
 
 }

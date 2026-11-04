@@ -1,6 +1,7 @@
 
 package com.example.demo.services;
 
+import com.example.demo.model.Drawings;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.repository.UserRepositoryImpl;
@@ -42,5 +43,28 @@ public class UserService {
         }
 
         return fetchedUser != null && user.getPassword().equals(fetchedUser.getPassword());
+    }
+
+    public void createNewDrawing(User user, Drawings drawings) {
+        user.getDrawingList().add(drawings);
+    }
+
+    public void deleteDrawing(User user, int drawingID) {
+        for (int i = user.getDrawingList().size() - 1; i >= 0; i--) {
+            if (user.getDrawingList().get(i).getID() == drawingID) {
+                user.getDrawingList().remove(i);
+                break;
+            }
+        }
+    }
+
+    public User getUserByUsername(String name) {
+        List<User> repo = userRepository.getAllUsers();
+        for (int i = 0; i < repo.size(); i++) {
+            if (repo.get(i).getUsername().equals(name)) {
+                return repo.get(i);
+            }
+        }
+        return null;
     }
 }

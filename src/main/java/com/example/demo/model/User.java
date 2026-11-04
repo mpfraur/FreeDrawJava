@@ -30,11 +30,15 @@ public class User {
         this.password = password;
     }
 
+    public List<Drawings> getDrawingList() {
+        return this.drawingsList;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "username='" + username + '\'' +
-                ", password='" + password + '\'' +
+                ", password='" + password + " Drawings: " + drawingsList + '\'' +
                 '}';
     }
 }
