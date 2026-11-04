@@ -26,16 +26,16 @@
 </div>
 
 
-<!--<div>-->
-<!--    <form method="post" action="/save">-->
-<!--        <input type="hidden" name="dibuix" id="hiddenInput">-->
+<div>
+    <form method="POST" th:action="@{/studio/canvas/save}">
+        <input type="hidden" name="dibuix" id="meuInputOcult">
 
-<!--        <input type="submit">-->
-<!--    </form>-->
+        <input type="submit" onclick="enviaForm()">
+    </form>
 
-<!--</div>-->
+</div>
 
-<button id="hiddenInput">Envia</button>
+<!--<button id="hiddenInput">Envia</button>-->
 
 
 <ul id="Board">

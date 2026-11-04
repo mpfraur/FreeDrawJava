@@ -328,10 +328,13 @@ function sendDataToServerViaString(boardInstance) {
 }
 
 
-document.getElementById("hiddenInput").addEventListener("click", function(event) {
-    sendDataToServerViaString(board);
-    console.log(sendDataToServerViaString(board))
-})
+
+
+const inputOcult = document.getElementById('meuInputOcult');
+
+inputOcult.value = sendDataToServerViaString(board);
+console.log("HOLA!!!!!!");
+console.log(inputOcult.value);
 
 
 
@@ -340,6 +343,6 @@ document.getElementById("hiddenInput").addEventListener("click", function(event)
 
 
 
+function enviaFormulari() {
 
-
-
+}
