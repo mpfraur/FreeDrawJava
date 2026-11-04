@@ -42,7 +42,7 @@ function getMousePos(event) {
 // code for Freedraw here
 freeDrawMode();
 
-//code for Shapes here
+//code for   Shapes here
 DOM.canvas.addEventListener("click", function(event) {
 
     if (DOM.controls.FreeDrawMode && DOM.controls.FreeDrawMode.checked) {
@@ -183,6 +183,9 @@ class Shape extends Draw {
         this.ctx.fillStyle = this.color;
         this.ctx.strokeStyle = this.color;
 
+        this.ctx.lineCap = "butt";
+        this.ctx.lineJoin = "miter";
+
         if (this.isFilled) {
             this.ctx.fillRect(position.x, position.y, width, height);
         } else {
@@ -257,6 +260,7 @@ class FreeDraw extends Draw {
             this.ctx.lineTo(currentPoint.x, currentPoint.y);
         }
 
+
         this.ctx.stroke();
     }
 
@@ -297,6 +301,9 @@ function freeDrawMode() {
 
         ctx.strokeStyle = activeLine.color;
         ctx.lineWidth = activeLine.lineWidth;
+        // the shit taht makes round do not del
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
         ctx.beginPath();
         ctx.moveTo(last.x, last.y);
         ctx.lineTo(p.x, p.y);
@@ -313,9 +320,13 @@ function freeDrawMode() {
     DOM.canvas.addEventListener("mouseleave", finishStroke);
 }
 
-function sendDataToServerViaString(board) {
-    return "" + JSON.stringify(board);
+function sendDataToServerViaString(boardInstance) {
+    return JSON.stringify(boardInstance.drawsList, (key, value) => {
+        if (key === 'ctx') return undefined;
+        return value;
+    });
 }
+
 
 document.getElementById("hiddenInput").addEventListener("click", function(event) {
     sendDataToServerViaString(board);

@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.User;
 import com.example.demo.services.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,8 +21,14 @@ public class StudioController {
     }
 
     @GetMapping("/canva/{id}")
-    public String openEditController(@PathVariable int id, Model model) {
-        model.addAttribute("drawingID", id);
-        return "studio/canvas";
+    public String openEditController(@PathVariable("id") int id, Model model, HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        User user = userService.getUserByUsername(username);
+        if (user != null) {
+            model.addAttribute("drawingID", id);
+            return "studio/canvas";
+        }
+
+        return "redirect:/home";
     }
 }
