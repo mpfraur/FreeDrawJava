@@ -2,11 +2,12 @@ package com.example.demo.services;
 
 
 import com.example.demo.DTO.DrawDTO;
+import com.example.demo.DTO.FreeDrawDTO;
+import com.example.demo.DTO.PositionDTO;
+import com.example.demo.DTO.ShapeDTO;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.repository.UserRepositoryImpl;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,19 +19,48 @@ public class DrawingService {
 
     private static final Gson gayson = new Gson();
 
-    public static void parseJsonService(String json) {
-        DrawDTO[] drawings = gayson.fromJson(json, DrawDTO[].class);
+    public static List<DrawDTO> parseJsonService(String json) {
 
-        List<DrawDTO> list = Arrays.asList(drawings);
-        JsonArray drawings2 = JsonParser.parseString(json).getAsJsonArray();
-        System.out.println(list);
-        System.out.println(drawings2);
+        JsonArray jsonData = JsonParser.parseString(json).getAsJsonArray();
+        List<DrawDTO> drawingData = new ArrayList<>();
 
-        for (int i = 0; i < list.size(); i++) {
-            DrawDTO currentDraw = list.get(i);
+        for (int i = 0; i < jsonData.size(); i++) {
+            JsonElement currentElement = jsonData.get(i);
 
+            // to seperate if its FreeDraw or Shape
+            if (currentElement.getAsJsonObject().has("shape")) {
+                JsonObject jsonObj = currentElement.getAsJsonObject();
+                String color = jsonObj.get("color").getAsString();
+                int lineWidth = jsonObj.get("lineWidth").getAsInt();
+                JsonObject positionJson = jsonObj.get("position").getAsJsonObject();
+                PositionDTO position = new PositionDTO(positionJson.get("x").getAsDouble(), positionJson.get("y").getAsDouble());
+                String shape = jsonObj.get("shape").getAsString();
+                boolean isFilled = jsonObj.get("isFilled").getAsBoolean();
+                //     public ShapeDTO(String col, int lineWidth, PositionDTO position, String shapename, boolean isFilled) {
+                ShapeDTO shapeDTO = new ShapeDTO(color, lineWidth, position, shape, isFilled);
+                drawingData.add(shapeDTO);
+
+            } else {
+                JsonObject jsonObject = currentElement.getAsJsonObject();
+                String color = jsonObject.get("color").getAsString();
+                int lineWidth = jsonObject.get("lineWidth").getAsInt();
+                JsonObject positionJson = jsonObject.get("position").getAsJsonObject();
+                PositionDTO position = new PositionDTO(positionJson.get("x").getAsDouble(), positionJson.get("y").getAsDouble());
+                boolean isDrawing = jsonObject.get("isDrawing").getAsBoolean();
+                JsonArray positionsData = jsonObject.get("pointsArray").getAsJsonArray();
+                List<PositionDTO> pointsArray = new ArrayList<>();
+
+                for (int j = 0; j < positionsData.size(); j++) {
+                    JsonObject pointJsonObject = positionsData.get(j).getAsJsonObject();
+                    pointsArray.add(new PositionDTO(pointJsonObject.get("x").getAsDouble(), pointJsonObject.get("y").getAsDouble()));
+                }
+                FreeDrawDTO freeDrawDTO = new FreeDrawDTO(color, lineWidth, position, isDrawing, pointsArray);
+                drawingData.add(freeDrawDTO);
+
+            }
         }
 
+        return drawingData;
     }
 
     public static void main(String[] args) {

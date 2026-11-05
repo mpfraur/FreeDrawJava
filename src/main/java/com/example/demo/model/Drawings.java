@@ -58,4 +58,13 @@ public class Drawings {
     public void setContent(List<DrawDTO> content) {
         this.content = content;
     }
+
+    @Override
+    public String toString() {
+        return "Drawings{" +
+                "ID=" + ID +
+                ", name='" + name + '\'' +
+                ", content=" + content +
+                '}';
+    }
 }

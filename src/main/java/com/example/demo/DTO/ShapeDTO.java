@@ -11,4 +11,15 @@ public class ShapeDTO extends DrawDTO {
         this.shapeName = shapename;
         this.isFilled = isFilled;
     }
+
+    @Override
+    public String toString() {
+        return "ShapeDTO{" +
+                "shapeName='" + shapeName + '\'' +
+                ", isFilled=" + isFilled +
+                ", color='" + color + '\'' +
+                ", lineWidth=" + lineWidth +
+                ", position=" + position +
+                '}';
+    }
 }

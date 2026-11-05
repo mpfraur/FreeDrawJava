@@ -13,4 +13,14 @@ public class FreeDrawDTO extends DrawDTO {
         this.pointsArray = pointArrays;
     }
 
+    @Override
+    public String toString() {
+        return "FreeDrawDTO{" +
+                "isDrawing=" + isDrawing +
+                ", pointsArray=" + pointsArray +
+                ", color='" + color + '\'' +
+                ", lineWidth=" + lineWidth +
+                ", position=" + position +
+                '}';
+    }
 }

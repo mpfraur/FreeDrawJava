@@ -1,6 +1,7 @@
 
 package com.example.demo.services;
 
+import com.example.demo.DTO.DrawDTO;
 import com.example.demo.model.Drawings;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
@@ -58,6 +59,15 @@ public class UserService {
         }
     }
 
+
+    public void updateDrawing(User user, int drawingID, List<DrawDTO> data) {
+        for (int i = 0; i < user.getDrawingList().size(); i++) {
+            if (user.getDrawingList().get(i).getID() == drawingID) {
+                user.getDrawingList().get(i).setContent(data);
+            }
+        }
+    }
+
     public User getUserByUsername(String name) {
         List<User> repo = userRepository.getAllUsers();
         for (int i = 0; i < repo.size(); i++) {
@@ -67,4 +77,6 @@ public class UserService {
         }
         return null;
     }
+
+
 }
