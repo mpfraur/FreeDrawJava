@@ -30,10 +30,36 @@ public class StudioController {
         return "redirect:/home";
     }
 
-    @PostMapping("/save")
+    @PostMapping("/canvas/save")
     public String fetchDataSaveStringJSON(@RequestParam String jsonData) {
         System.out.println(jsonData);
 
         return "redirect:/home";
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

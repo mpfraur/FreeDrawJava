@@ -339,10 +339,14 @@ console.log(inputOcult.value);
 
 
 
-
-
-
-
 function enviaFormulari() {
-
+    console.log(board.drawsList);
+    console.log(board.drawsList.length);
+    return inputOcult.value = sendDataToServerViaString(board);
 }
+
+document.getElementById("sendBoard").addEventListener("click", function() {
+    console.log(board.drawsList);
+    console.log(board.drawsList.length);
+    enviaFormulari();
+});

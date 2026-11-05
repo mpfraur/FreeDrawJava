@@ -1,5 +1,7 @@
 package com.example.demo.model;
 
+import com.example.demo.DTO.DrawDTO;
+
 import java.util.List;
 
 public class Drawings {
@@ -7,7 +9,7 @@ public class Drawings {
     int ID;
     String name;
     User owner;
-    List<Draw> content;
+    List<DrawDTO> content;
 
     public String getName() {
         return name;
@@ -17,7 +19,7 @@ public class Drawings {
         this.name = name;
     }
 
-    public Drawings(User userAcc, List<Draw> drawing, String name) {
+    public Drawings(User userAcc, List<DrawDTO> drawing, String name) {
         this.owner = userAcc;
         this.content = drawing;
         idsCount++;
@@ -49,11 +51,11 @@ public class Drawings {
         this.owner = owner;
     }
 
-    public List<Draw> getContent() {
+    public List<DrawDTO> getContent() {
         return content;
     }
 
-    public void setContent(List<Draw> content) {
+    public void setContent(List<DrawDTO> content) {
         this.content = content;
     }
 }
