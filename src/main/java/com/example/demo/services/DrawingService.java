@@ -42,8 +42,14 @@ public class DrawingService {
                 String shape = jsonObj.get("shape").getAsString();
                 boolean isFilled = jsonObj.get("isFilled").getAsBoolean();
                 //     public ShapeDTO(String col, int lineWidth, PositionDTO position, String shapename, boolean isFilled) {
-                ShapeDTO shapeDTO = new ShapeDTO(color, lineWidth, position, shape, isFilled);
+                int size = 10;
+                if (jsonObj.has("size")) {
+                    size = jsonObj.get("size").getAsInt();
+                }
+
+                ShapeDTO shapeDTO = new ShapeDTO(color, lineWidth, position, shape, isFilled, size);
                 drawingData.add(shapeDTO);
+
 
             } else {
                 // FreeDraw

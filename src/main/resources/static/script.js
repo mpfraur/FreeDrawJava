@@ -13,7 +13,7 @@ let DOM = {
     controls: controls
 };
 
-let ctx = DOM.canvas.getContext("2d");
+export let ctx = DOM.canvas.getContext("2d");
 
 DOM.controls.FreeDrawMode.addEventListener("change", function() {
     if (this.checked) {
@@ -32,6 +32,15 @@ let currentFreeDraw = null;
 
 function getMousePos(event) {
     const rect = DOM.canvas.getBoundingClientRect();
+    console.log("Calculated:", {
+        x: event.clientX - rect.left - DOM.canvas.clientLeft,
+        y: event.clientY - rect.top - DOM.canvas.clientTop
+    });
+
+    console.log("Offset:", {
+        x: event.offsetX,
+        y: event.offsetY
+    });
     return {
         x: event.clientX - rect.left - DOM.canvas.clientLeft,
         y: event.clientY - rect.top - DOM.canvas.clientTop
@@ -61,13 +70,19 @@ DOM.canvas.addEventListener("click", function(event) {
 
 
 function drawShape(mousePosition) {
+    console.log({
+        shape: DOM.controls.shapeOption.value,
+        color: DOM.controls.color.value,
+        filled: DOM.controls.isFilledToggle.checked
+    });
     let shape = new Shape(
         DOM.controls.shapeOption.value,
         DOM.controls.isFilledToggle.checked,
         DOM.controls.color.value,
         Number(DOM.controls.strokeValue.value),
         mousePosition,
-        ctx
+        ctx,
+        Number(DOM.controls.sizeOfShape.value)
     );
 
     let size = Number(DOM.controls.sizeOfShape.value);
@@ -102,11 +117,15 @@ class Board {
     removeLastDraw() {
         return this.drawsList.pop();
     }
+
+    isEmpty() {
+        return (this.drawsList.length === 0);
+    }
 }
 
-const board = new Board([]);
+export const board = new Board([]);
 
-function updateBoard() {
+export function updateBoard() {
     let htmlList = DOM.controls.Board;
     htmlList.innerHTML = "";
 
@@ -130,13 +149,13 @@ function updateBoard() {
     }
 }
 
-function redrawCanvas() {
+export function redrawCanvas() {
     ctx.clearRect(0, 0, DOM.canvas.width, DOM.canvas.height);
 
 
 
     for (let draw of board.drawsList) {
-        let size = Number(DOM.controls.sizeOfShape.value);
+        let size = draw.size || 10;
 
         if (draw instanceof FreeDraw) {
             draw.drawLine(draw.position);
@@ -162,7 +181,7 @@ document.addEventListener("keydown", function(event) {
 });
 
 
-class Draw {
+export class Draw {
     constructor(color, lineWidth, position, ctx) {
         this.color = color;
         this.lineWidth = lineWidth;
@@ -171,11 +190,12 @@ class Draw {
     }
 }
 
-class Shape extends Draw {
-    constructor(shape, isFilled, color, lineWidth, position, ctx) {
+export class Shape extends Draw {
+    constructor(shape, isFilled, color, lineWidth, position, ctx, size) {
         super(color, lineWidth, position, ctx);
         this.shape = shape;
         this.isFilled = isFilled;
+        this.size = size;
     }
 
     drawSquare(width, height, position) {
@@ -227,7 +247,7 @@ class Shape extends Draw {
     }
 }
 
-class PositionObject {
+export class PositionObject {
     constructor(x, y) {
         this.x = x;
         this.y = y;
@@ -235,7 +255,7 @@ class PositionObject {
 }
 
 
-class FreeDraw extends Draw {
+export class FreeDraw extends Draw {
 
     constructor(color, lineWidth, position, ctx, isDrawing, pointsArray) {
         super(color, lineWidth, position, ctx); // position is actually starting position
@@ -248,7 +268,7 @@ class FreeDraw extends Draw {
         this.ctx.fillStyle = this.color;
         this.ctx.strokeStyle = this.color;
 
-        if (this.pointsArray === null || this.pointsArray.length === 0) {
+        if (!this.pointsArray || this.pointsArray.length === 0) {
             throw new Error("The points are empty.");
         }
 
@@ -259,7 +279,6 @@ class FreeDraw extends Draw {
             let currentPoint = this.pointsArray[i];
             this.ctx.lineTo(currentPoint.x, currentPoint.y);
         }
-
 
         this.ctx.stroke();
     }
@@ -350,3 +369,5 @@ document.getElementById("sendBoard").addEventListener("click", function() {
     console.log(board.drawsList.length);
     enviaFormulari();
 });
+
+
