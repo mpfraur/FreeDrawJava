@@ -41,4 +41,8 @@ public class User {
                 ", password='" + password + " Drawings: " + drawingsList + '\'' +
                 '}';
     }
+
+    public Drawings getDrawingByID(int id) {
+        return getDrawingList().stream().filter(d -> d.getID() == id).findFirst().orElse(null);
+    }
 }

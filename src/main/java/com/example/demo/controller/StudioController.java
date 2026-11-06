@@ -5,6 +5,7 @@ import com.example.demo.model.Drawings;
 import com.example.demo.model.User;
 import com.example.demo.services.DrawingService;
 import com.example.demo.services.UserService;
+import com.google.gson.Gson;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,9 +19,11 @@ import java.util.List;
 public class StudioController {
 
     private final UserService userService;
+    private final DrawingService drawingService;
 
-    public StudioController(UserService userService) {
+    public StudioController(UserService userService, DrawingService drawingService) {
         this.userService = userService;
+        this.drawingService = drawingService;
     }
 
     @GetMapping("/canva/{id}")
@@ -29,9 +32,15 @@ public class StudioController {
         User user = userService.getUserByUsername(username);
         if (user != null) {
             model.addAttribute("drawingID", id);
+
+            Drawings drawingData = user.getDrawingByID(id);
+            if (drawingData != null) {
+                String drawingDataSetAsJSON = new Gson().toJson(drawingData);
+                model.addAttribute("JSON_test_print", drawingDataSetAsJSON);
+            }
+
             return "studio/canvas";
         }
-
         return "redirect:/home";
     }
 

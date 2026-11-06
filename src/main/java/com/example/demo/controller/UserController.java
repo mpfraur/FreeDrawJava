@@ -87,7 +87,7 @@ public class UserController {
         if (user == null) {
             model.addAttribute("message", "Error message");
         } else {
-            userService.createNewDrawing(user, new Drawings(user, new ArrayList<>(), drawingName));
+            userService.createNewDrawing(user, new Drawings(new ArrayList<>(), drawingName));
         }
         System.out.println(userService.getUserByUsername(username));
 

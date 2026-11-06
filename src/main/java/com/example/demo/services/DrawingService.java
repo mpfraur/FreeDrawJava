@@ -5,6 +5,8 @@ import com.example.demo.DTO.DrawDTO;
 import com.example.demo.DTO.FreeDrawDTO;
 import com.example.demo.DTO.PositionDTO;
 import com.example.demo.DTO.ShapeDTO;
+import com.example.demo.model.Drawings;
+import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.repository.UserRepositoryImpl;
 import com.google.gson.*;
@@ -17,7 +19,10 @@ import java.util.List;
 @Service
 public class DrawingService {
 
-    private static final Gson gayson = new Gson();
+    public boolean checkIfUserContainsDrawing(User user, int id) {
+        return user.getDrawingList().stream().anyMatch(d -> d.getID() == id);
+    }
+
 
     public static List<DrawDTO> parseJsonService(String json) {
 
@@ -41,6 +46,7 @@ public class DrawingService {
                 drawingData.add(shapeDTO);
 
             } else {
+                // FreeDraw
                 JsonObject jsonObject = currentElement.getAsJsonObject();
                 String color = jsonObject.get("color").getAsString();
                 int lineWidth = jsonObject.get("lineWidth").getAsInt();

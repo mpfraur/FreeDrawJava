@@ -8,7 +8,6 @@ public class Drawings {
     static int idsCount = 0;
     int ID;
     String name;
-    User owner;
     List<DrawDTO> content;
 
     public String getName() {
@@ -19,8 +18,7 @@ public class Drawings {
         this.name = name;
     }
 
-    public Drawings(User userAcc, List<DrawDTO> drawing, String name) {
-        this.owner = userAcc;
+    public Drawings(List<DrawDTO> drawing, String name) {
         this.content = drawing;
         idsCount++;
         this.ID = idsCount;
@@ -43,13 +41,6 @@ public class Drawings {
         this.ID = ID;
     }
 
-    public User getOwner() {
-        return owner;
-    }
-
-    public void setOwner(User owner) {
-        this.owner = owner;
-    }
 
     public List<DrawDTO> getContent() {
         return content;
