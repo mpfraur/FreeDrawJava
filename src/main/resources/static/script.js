@@ -91,6 +91,8 @@ function drawShape(mousePosition) {
         shape.drawSquare(size, size, mousePosition);
     } else if (shape.shape === "triangle") {
         shape.drawTriangle(size, mousePosition);
+    } else if (shape.shape === "star") {
+        shape.drawStar(size, mousePosition);
     } else {
         shape.drawCircle(size, mousePosition);
     }
@@ -166,6 +168,8 @@ export function redrawCanvas() {
             draw.drawSquare(size, size, draw.position);
         } else if (draw.shape === "triangle") {
             draw.drawTriangle(size, draw.position);
+        } else if (draw.shape === "star") {
+            draw.drawStar(size, draw.position);     
         } else {
             draw.drawCircle(size, draw.position);
         }
@@ -245,6 +249,43 @@ export class Shape extends Draw {
             this.ctx.stroke();
         }
     }
+
+    drawStar(size, position) {
+        this.ctx.lineWidth = this.lineWidth;
+        this.ctx.fillStyle = this.color;
+        this.ctx.strokeStyle = this.color;
+
+        let radius = size;
+        let inner_radius = (size / 2);
+        let points = 7;
+        let angle = -Math.PI / 2 + Math.PI / points;
+        
+        
+
+        this.ctx.beginPath();
+        this.ctx.moveTo(position.x, position.y - radius);
+        for (let i = 0; i < points * 2; i++) {
+
+            if (i % 2 == 0) {
+                this.ctx.lineTo(position.x + inner_radius * Math.cos(angle), position.y + inner_radius * Math.sin(angle));
+            } else {
+                this.ctx.lineTo(position.x + radius * Math.cos(angle), position.y + radius * Math.sin(angle));
+            }
+
+            angle += Math.PI / points;
+        }
+        this.ctx.closePath();
+
+
+        if (this.isFilled) {
+            this.ctx.fill();
+        } else {
+            this.ctx.stroke();
+        }
+    }
+
+
+
 }
 
 export class PositionObject {

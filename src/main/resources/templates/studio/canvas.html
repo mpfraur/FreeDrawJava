@@ -9,7 +9,8 @@
 <h1>Canva</h1>
 <h2>ID: <span th:text="${drawingID}"></span> </h2>
 
-<p>drawing Data print: <span th:text="${JSON_test_print}" id="JsonString"></span></p>
+
+<p hidden>drawing Data print: <span th:text="${JSON_test_print}" id="JsonString"></span></p>
 
 <canvas id="canvas" width="800" height="600" style="border: 2px solid black;"></canvas>
 
@@ -19,6 +20,7 @@
         <option value="square">Square</option>
         <option value="circle">Circle</option>
         <option value="triangle">Triangle</option>
+        <option value="star">Star</option>
     </select>
     <input type="range" min="1" max="100" value="10" id="sizeOfShape">
     <input type="color" value="#ff0000" id="color">
