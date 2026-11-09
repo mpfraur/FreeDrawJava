@@ -3,7 +3,9 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Drawings;
 import com.example.demo.model.User;
+import com.example.demo.services.GalleryService;
 import com.example.demo.services.UserService;
+import com.google.gson.Gson;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 @Controller
@@ -23,8 +26,11 @@ public class UserController {
     @Autowired
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    private final GalleryService galleryService;
+
+    public UserController(UserService userService, GalleryService galleryService) {
         this.userService = userService;
+        this.galleryService = galleryService;
     }
 
     @GetMapping("/register")
@@ -104,6 +110,22 @@ public class UserController {
         return "redirect:/home";
     }
 
+    // ------------ Gallery Stuff -------------------
+
+    @GetMapping("/gallery")
+    public String GalleryController(HttpSession session, Model model) {
+        String username = (String) session.getAttribute("username");
+        User user = userService.getUserByUsername(username);
+
+        if (user == null) {
+            return "redirect:/login";
+        }
+        List<Drawings> gallery = galleryService.getGallery();
+        String galleryJSON = new Gson().toJson(gallery);
+        model.addAttribute("gallerydata", galleryJSON);
+
+        return "gallery";
+    }
 
 
 
