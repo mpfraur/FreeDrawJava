@@ -3,6 +3,7 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Drawings;
 import com.example.demo.model.User;
+import com.example.demo.services.DrawingService;
 import com.example.demo.services.GalleryService;
 import com.example.demo.services.UserService;
 import com.google.gson.Gson;
@@ -43,6 +44,11 @@ public class UserController {
 
     @PostMapping("/register")
     public String register(@RequestParam String username, @RequestParam String password, Model model, HttpSession session) {
+        if (password.length() < 5) {
+            String warn = "Password must be over 5 characters";
+            model.addAttribute("warning", warn);
+            return "register";
+        }
         userService.createUser(username, password);
         System.out.println(username + " Has been created " + userService.getAllUsers());
         model.addAttribute("message", username + " Has been created " + userService.getAllUsers());
@@ -89,6 +95,10 @@ public class UserController {
     public String createNewDrawingController(@RequestParam String drawingName, HttpSession session, Model model) {
         String username = (String) session.getAttribute("username");
         User user = userService.getUserByUsername(username);
+
+        if (drawingName.isEmpty()) {
+            drawingName = DrawingService.randomNameGenerator();
+        }
 
         if (user == null) {
             model.addAttribute("message", "Error message");

@@ -9,8 +9,8 @@ import java.util.List;
 
 @Service
 public class GalleryService {
-    static final int ammountOfDrawingsPerUser = 5;
-    static final int ammountOfUsersShownGallery = 10;
+    static final int ammountOfDrawingsPerUser = 12;
+    static final int ammountOfUsersShownGallery = 100;
 
     private final UserService userService;
 
@@ -38,5 +38,15 @@ public class GalleryService {
         }
 
         return gallery;
+    }
+
+    public List<Drawings> getAllDrawings() {
+        List<Drawings> allDrawings = new ArrayList<>();
+        List<User> users = userService.getAllUsers();
+        for (int i = 0; i < users.size(); i++) {
+            User currentUser = users.get(i);
+            allDrawings.addAll(currentUser.getDrawingList());
+        }
+        return allDrawings;
     }
 }

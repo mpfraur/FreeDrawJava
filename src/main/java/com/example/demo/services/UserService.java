@@ -1,11 +1,11 @@
 
 package com.example.demo.services;
 
-import com.example.demo.DTO.DrawDTO;
+import com.example.demo.model.Draw;
 import com.example.demo.model.Drawings;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.repository.UserRepositoryImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,7 +13,10 @@ import java.util.List;
 @Service
 public class UserService {
 
-    private final UserRepository userRepository = new UserRepositoryImpl();
+    //private final UserRepository userRepository = new UserRepositoryImpl();
+
+    @Autowired
+    private UserRepository userRepository;
 
     public User createUser(String username, String password) {
         if (doesUserExist(username)) {
@@ -61,7 +64,7 @@ public class UserService {
     }
 
 
-    public void updateDrawing(User user, int drawingID, List<DrawDTO> data) {
+    public void updateDrawing(User user, int drawingID, List<Draw> data) {
         for (int i = 0; i < user.getDrawingList().size(); i++) {
             if (user.getDrawingList().get(i).getID() == drawingID) {
                 user.getDrawingList().get(i).setContent(data);

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Galleries</title>
+</head>
+<body>
+    <h1>Other Peoples Drawings: </h1>
+    <ul>
+        <li th:each="drawing : ${drawingsList}" >
+            <span th:text="${drawing.ID}"></span>
+            <span th:text="${drawing.name}"></span>
+            <form method="get" th:action="@{/galleries/canvaview/{id}(id=${drawing.ID})}">
+                <input type="submit" value="View">
+            </form>
+        </li>
+    </ul>
+</body>
+</html>

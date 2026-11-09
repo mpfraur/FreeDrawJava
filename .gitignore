@@ -37,3 +37,12 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+.contextai
+
+.git.backup.manu
+
+.git_bak
+
+.git-fotut
+

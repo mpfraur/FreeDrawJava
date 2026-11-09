@@ -13,20 +13,21 @@ let DOM = {
     controls: controls
 };
 
-export let ctx = DOM.canvas.getContext("2d");
+export let ctx = DOM.canvas ? DOM.canvas.getContext("2d") : null;
 
-DOM.controls.FreeDrawMode.addEventListener("change", function() {
-    if (this.checked) {
-        DOM.controls.isFilledToggle.disabled = true;
-        DOM.controls.shapeOption.disabled = true;
-        DOM.controls.sizeOfShape.disabled = true;
-    } else {
-        DOM.controls.isFilledToggle.disabled = false;
-        DOM.controls.shapeOption.disabled = false;
-        DOM.controls.sizeOfShape.disabled = false;
-    }
-});
-
+if (DOM.controls.FreeDrawMode) {
+    DOM.controls.FreeDrawMode.addEventListener("change", function() {
+        if (this.checked) {
+            DOM.controls.isFilledToggle.disabled = true;
+            DOM.controls.shapeOption.disabled = true;
+            DOM.controls.sizeOfShape.disabled = true;
+        } else {
+            DOM.controls.isFilledToggle.disabled = false;
+            DOM.controls.shapeOption.disabled = false;
+            DOM.controls.sizeOfShape.disabled = false;
+        }
+    });
+}
 
 let currentFreeDraw = null;
 
@@ -47,27 +48,27 @@ function getMousePos(event) {
     };
 }
 
-
 // code for Freedraw here
-freeDrawMode();
+if (DOM.canvas) {
+    freeDrawMode();
 
-//code for   Shapes here
-DOM.canvas.addEventListener("click", function(event) {
+    //code for   Shapes here
+    DOM.canvas.addEventListener("click", function(event) {
 
-    if (DOM.controls.FreeDrawMode && DOM.controls.FreeDrawMode.checked) {
-        return;
-    }
+        if (DOM.controls.FreeDrawMode && DOM.controls.FreeDrawMode.checked) {
+            return;
+        }
 
-    const rect = DOM.canvas.getBoundingClientRect();
+        const rect = DOM.canvas.getBoundingClientRect();
 
-    let mousePosition = {
-        x: event.clientX - rect.left - DOM.canvas.clientLeft,
-        y: event.clientY - rect.top - DOM.canvas.clientTop
-    };
+        let mousePosition = {
+            x: event.clientX - rect.left - DOM.canvas.clientLeft,
+            y: event.clientY - rect.top - DOM.canvas.clientTop
+        };
 
-    drawShape(mousePosition);
-});
-
+        drawShape(mousePosition);
+    });
+}
 
 function drawShape(mousePosition) {
     console.log({
@@ -101,11 +102,7 @@ function drawShape(mousePosition) {
     updateBoard();
     console.log(DOM);
     console.log(DOM.Board);
-
 }
-
-
-
 
 class Board {
     constructor(drawsList) {
@@ -129,6 +126,7 @@ export const board = new Board([]);
 
 export function updateBoard() {
     let htmlList = DOM.controls.Board;
+    if (!htmlList) return;
     htmlList.innerHTML = "";
 
     for (let i = 0; i < board.drawsList.length; i++) {
@@ -152,9 +150,8 @@ export function updateBoard() {
 }
 
 export function redrawCanvas() {
+    if (!ctx || !DOM.canvas) return;
     ctx.clearRect(0, 0, DOM.canvas.width, DOM.canvas.height);
-
-
 
     for (let draw of board.drawsList) {
         let size = draw.size || 10;
@@ -169,7 +166,7 @@ export function redrawCanvas() {
         } else if (draw.shape === "triangle") {
             draw.drawTriangle(size, draw.position);
         } else if (draw.shape === "star") {
-            draw.drawStar(size, draw.position);     
+            draw.drawStar(size, draw.position);
         } else {
             draw.drawCircle(size, draw.position);
         }
@@ -183,7 +180,6 @@ document.addEventListener("keydown", function(event) {
         updateBoard();
     }
 });
-
 
 export class Draw {
     constructor(color, lineWidth, position, ctx) {
@@ -259,8 +255,6 @@ export class Shape extends Draw {
         let inner_radius = (size / 2);
         let points = 7;
         let angle = -Math.PI / 2 + Math.PI / points;
-        
-        
 
         this.ctx.beginPath();
         this.ctx.moveTo(position.x, position.y - radius);
@@ -276,16 +270,12 @@ export class Shape extends Draw {
         }
         this.ctx.closePath();
 
-
         if (this.isFilled) {
             this.ctx.fill();
         } else {
             this.ctx.stroke();
         }
     }
-
-
-
 }
 
 export class PositionObject {
@@ -295,11 +285,9 @@ export class PositionObject {
     }
 }
 
-
 export class FreeDraw extends Draw {
-
     constructor(color, lineWidth, position, ctx, isDrawing, pointsArray) {
-        super(color, lineWidth, position, ctx); // position is actually starting position
+        super(color, lineWidth, position, ctx);
         this.isDrawing = isDrawing;
         this.pointsArray = pointsArray;
     }
@@ -323,14 +311,13 @@ export class FreeDraw extends Draw {
 
         this.ctx.stroke();
     }
-
 }
 
 function freeDrawMode() {
     let activeLine = null;
 
     DOM.canvas.addEventListener("mousedown", function (event) {
-        if (!DOM.controls.FreeDrawMode.checked) return;
+        if (!DOM.controls.FreeDrawMode || !DOM.controls.FreeDrawMode.checked) return;
         if (event.button !== 0) return;
 
         const start = getMousePos(event);
@@ -361,7 +348,6 @@ function freeDrawMode() {
 
         ctx.strokeStyle = activeLine.color;
         ctx.lineWidth = activeLine.lineWidth;
-        // the shit taht makes round do not del
         ctx.lineCap = "round";
         ctx.lineJoin = "round";
         ctx.beginPath();
@@ -387,28 +373,26 @@ function sendDataToServerViaString(boardInstance) {
     });
 }
 
-
-
-
 const inputOcult = document.getElementById('meuInputOcult');
-
-inputOcult.value = sendDataToServerViaString(board);
-console.log("HOLA!!!!!!");
-console.log(inputOcult.value);
-
-
-
+if (inputOcult) {
+    inputOcult.value = sendDataToServerViaString(board);
+    console.log("HOLA!!!!!!");
+    console.log(inputOcult.value);
+}
 
 function enviaFormulari() {
     console.log(board.drawsList);
     console.log(board.drawsList.length);
-    return inputOcult.value = sendDataToServerViaString(board);
+    if (inputOcult) {
+        return inputOcult.value = sendDataToServerViaString(board);
+    }
 }
 
-document.getElementById("sendBoard").addEventListener("click", function() {
-    console.log(board.drawsList);
-    console.log(board.drawsList.length);
-    enviaFormulari();
-});
-
-
+const sendBoardBtn = document.getElementById("sendBoard");
+if (sendBoardBtn) {
+    sendBoardBtn.addEventListener("click", function() {
+        console.log(board.drawsList);
+        console.log(board.drawsList.length);
+        enviaFormulari();
+    });
+}

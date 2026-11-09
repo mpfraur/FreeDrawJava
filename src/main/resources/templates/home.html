@@ -9,6 +9,12 @@
 <a href="/logout">Logout</a>
 
 <h3>Drawings</h3>
+<h2>Create new Drawing</h2>
+<form method="POST" action="/home">
+    <p>Name:</p>
+    <input type="text" id="name" name="drawingName">
+    <input type="submit">
+</form>
 <ul>
     <li th:each="drawing : ${drawingsList}">
         <span th:text="${drawing.name}"></span>
@@ -24,11 +30,6 @@
     </li>
 </ul>
 
-<h2>Create new Drawing</h2>
-<form method="POST" action="/home">
-    <p>Name:</p>
-    <input type="text" id="name" name="drawingName">
-    <input type="submit">
-</form>
+
 </body>
 </html>

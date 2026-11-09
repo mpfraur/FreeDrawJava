@@ -1,14 +1,14 @@
-package com.example.demo.DTO;
+package com.example.demo.model;
 
 
 
-public class DrawDTO {
+public class Draw {
     // color, lineWidth, position
     String color;
     int lineWidth;
     PositionDTO position;
     // ctx
-    public DrawDTO(String col, int lineWidth, PositionDTO position) {
+    public Draw(String col, int lineWidth, PositionDTO position) {
         this.color = col;
         this.lineWidth = lineWidth;
         this.position = position;

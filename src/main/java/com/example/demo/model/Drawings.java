@@ -1,14 +1,13 @@
 package com.example.demo.model;
 
-import com.example.demo.DTO.DrawDTO;
-
 import java.util.List;
 
 public class Drawings {
     static int idsCount = 0;
     int ID;
     String name;
-    List<DrawDTO> content;
+    List<Draw> content;
+    String user;
 
     public String getName() {
         return name;
@@ -18,7 +17,7 @@ public class Drawings {
         this.name = name;
     }
 
-    public Drawings(List<DrawDTO> drawing, String name) {
+    public Drawings(List<Draw> drawing, String name) {
         this.content = drawing;
         idsCount++;
         this.ID = idsCount;
@@ -42,11 +41,11 @@ public class Drawings {
     }
 
 
-    public List<DrawDTO> getContent() {
+    public List<Draw> getContent() {
         return content;
     }
 
-    public void setContent(List<DrawDTO> content) {
+    public void setContent(List<Draw> content) {
         this.content = content;
     }
 

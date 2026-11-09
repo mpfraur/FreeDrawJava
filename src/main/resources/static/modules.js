@@ -1,5 +1,5 @@
 import { board, Shape, FreeDraw, ctx, updateBoard } from "./script.js";
-import {redrawCanvas} from "./script.js";
+import { redrawCanvas } from "./script.js";
 
 const controls = {
     sizeOfShape: document.getElementById("sizeOfShape"),
@@ -16,13 +16,7 @@ let DOM = {
     controls: controls
 };
 
-
-const jsonString = document.getElementById("JsonString").textContent;
-//console.log(JSON.parse(jsonString));
-
-let drawingData = JSON.parse(jsonString);
-
-function parcingToBoard(drawingData) {
+export function parcingToBoard(drawingData) {
     let contentList = drawingData.content;
 
     for (let i = 0; i < contentList.length; i++) {
@@ -32,7 +26,6 @@ function parcingToBoard(drawingData) {
             let newShape = new Shape(objectShapeDTO.shapeName, objectShapeDTO.isFilled, objectShapeDTO.color, objectShapeDTO.lineWidth, objectShapeDTO.position, ctx, size);
             board.addDraw(newShape);
         } else {
-
             let objectFreeDrawDTO = contentList[i];
             let newFreeDraw = new FreeDraw(objectFreeDrawDTO.color, objectFreeDrawDTO.lineWidth, objectFreeDrawDTO.position, ctx, objectFreeDrawDTO.isDrawing, objectFreeDrawDTO.pointsArray);
             board.addDraw(newFreeDraw);
@@ -40,8 +33,11 @@ function parcingToBoard(drawingData) {
     }
 }
 
-console.log(drawingData)
-parcingToBoard(drawingData);
-updateBoard();
-redrawCanvas();
-
+const jsonStringEl = document.getElementById("JsonString");
+if (jsonStringEl) {
+    let drawingData = JSON.parse(jsonStringEl.textContent);
+    console.log(drawingData);
+    parcingToBoard(drawingData);
+    updateBoard();
+    redrawCanvas();
+}

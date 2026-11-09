@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<h1>Canva</h1>
+<h2>ID: <span th:text="${drawingID}"></span> </h2>
+
+
+<p hidden>drawing Data print: <span th:text="${json_data_view}" id="JsonViewDrawing"></span></p>
+
+<canvas id="canvas" width="800" height="600" style="border: 2px solid black;"></canvas>
+
+<!--<button id="hiddenInput">Envia</button>-->
+
+<script type="module" src="/gallery.js"></script>
+</body>
+</html>
