@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Galleries</title>
@@ -8,12 +8,15 @@
     <h1>Other Peoples Drawings: </h1>
     <ul>
         <li th:each="drawing : ${drawingsList}" >
-            <span th:text="${drawing.ID}"></span>
-            <span th:text="${drawing.name}"></span>
+            <span th:text="'ID: ' + ${drawing.ID}"></span>
+            <span th:text="'Name: ' + ${drawing.name}"></span>
+            <span th:text="'User: ' + ${drawing.user}"></span>
+            <span th:text="'Draws: ' + ${drawing.amountOFDraws}"></span>
             <form method="get" th:action="@{/galleries/canvaview/{id}(id=${drawing.ID})}">
                 <input type="submit" value="View">
             </form>
         </li>
     </ul>
+    <script type="module" src="/navigation.js"></script>
 </body>
 </html>

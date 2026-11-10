@@ -8,6 +8,7 @@ public class Drawings {
     String name;
     List<Draw> content;
     String user;
+    int amountOFDraws;
 
     public String getName() {
         return name;
@@ -17,11 +18,13 @@ public class Drawings {
         this.name = name;
     }
 
-    public Drawings(List<Draw> drawing, String name) {
+    public Drawings(List<Draw> drawing, String name, String user) {
         this.content = drawing;
         idsCount++;
         this.ID = idsCount;
         this.name = name;
+        this.amountOFDraws = drawing.size();
+        this.user = user;
     }
 
     public static int getIdsCount() {
@@ -56,5 +59,21 @@ public class Drawings {
                 ", name='" + name + '\'' +
                 ", content=" + content +
                 '}';
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public int getAmountOFDraws() {
+        return content.size();
+    }
+
+    public void setAmountOFDraws(int amountOFDraws) {
+        this.amountOFDraws = amountOFDraws;
     }
 }

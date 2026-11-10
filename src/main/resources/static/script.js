@@ -120,6 +120,10 @@ class Board {
     isEmpty() {
         return (this.drawsList.length === 0);
     }
+
+    removeDraw(index) {
+        this.drawsList.splice(index, 1);
+    }
 }
 
 export const board = new Board([]);
@@ -136,14 +140,23 @@ export function updateBoard() {
         let name = document.createElement("h3");
         let position = document.createElement("p");
         let color = document.createElement("p");
+        let deleteButton = document.createElement("button");
 
         name.textContent = drawItem.shape ? drawItem.shape : "Free Line Line";
         position.textContent = JSON.stringify(drawItem.position);
         color.textContent = drawItem.color;
+        deleteButton.textContent = "Delete";
+
+        deleteButton.addEventListener("click", function() {
+            board.removeLastDraw(i);
+            redrawCanvas();
+            updateBoard();
+        })
 
         listItem.appendChild(name);
         listItem.appendChild(position);
         listItem.appendChild(color);
+        listItem.appendChild(deleteButton);
 
         htmlList.appendChild(listItem);
     }

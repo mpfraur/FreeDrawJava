@@ -39,6 +39,8 @@ public class GalleryController {
 
         List<Drawings> otherUsersDrawings = galleryService.getGallery();
         model.addAttribute("drawingsList", otherUsersDrawings);
+        model.addAttribute("amountOfDraws", otherUsersDrawings);
+        model.addAttribute("ownerUsername", otherUsersDrawings);
         return "galleries/list";
     }
 
