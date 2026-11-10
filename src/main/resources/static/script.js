@@ -137,12 +137,19 @@ export function updateBoard() {
         let drawItem = board.drawsList[i];
 
         let listItem = document.createElement("li");
+        listItem.className = "list-group-item bg-dark text-light border-secondary mb-2 rounded";
+
         let name = document.createElement("h3");
         let position = document.createElement("p");
         let color = document.createElement("p");
         let deleteButton = document.createElement("button");
 
-        name.textContent = drawItem.shape ? drawItem.shape : "Free Line Line";
+        name.className = "h5";
+        position.className = "text-secondary";
+        color.className = "text-secondary";
+        deleteButton.className = "btn btn-danger btn-sm";
+
+        name.textContent = drawItem.shape ? drawItem.shape : "Free Line";
         position.textContent = JSON.stringify(drawItem.position);
         color.textContent = drawItem.color;
         deleteButton.textContent = "Delete";
@@ -151,7 +158,7 @@ export function updateBoard() {
             board.removeLastDraw(i);
             redrawCanvas();
             updateBoard();
-        })
+        });
 
         listItem.appendChild(name);
         listItem.appendChild(position);

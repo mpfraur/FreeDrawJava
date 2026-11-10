@@ -25,14 +25,11 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private final UserService userService;
+    private UserService userService;
 
-    private final GalleryService galleryService;
+    @Autowired
+    private GalleryService galleryService;
 
-    public UserController(UserService userService, GalleryService galleryService) {
-        this.userService = userService;
-        this.galleryService = galleryService;
-    }
 
     @GetMapping("/register")
     public String showRegister(HttpSession session) {
@@ -51,9 +48,8 @@ public class UserController {
         }
         userService.createUser(username, password);
         System.out.println(username + " Has been created " + userService.getAllUsers());
-        model.addAttribute("message", username + " Has been created " + userService.getAllUsers());
-        session.setAttribute("username", username);
-        return "redirect:/home";
+        model.addAttribute("message", username + " Has been created ");
+        return "register";
     }
 
     @GetMapping("/login")

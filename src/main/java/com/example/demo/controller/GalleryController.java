@@ -7,6 +7,7 @@ import com.example.demo.services.GalleryService;
 import com.example.demo.services.UserService;
 import com.google.gson.Gson;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,15 +20,14 @@ import java.util.List;
 @RequestMapping("/galleries")
 public class GalleryController {
 
-    DrawingService drawingService;
-    UserService userService;
-    GalleryService galleryService;
+    @Autowired
+    private DrawingService drawingService;
 
-    public GalleryController(DrawingService drawingService, UserService userService, GalleryService galleryService) {
-        this.drawingService = drawingService;
-        this.userService = userService;
-        this.galleryService = galleryService;
-    }
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private GalleryService galleryService;
 
     @GetMapping("/list")
     public String listAllUserDrawings(Model model, HttpSession session) {
