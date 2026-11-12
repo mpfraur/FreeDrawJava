@@ -46,6 +46,16 @@ public class UserController {
             model.addAttribute("warning", warn);
             return "register";
         }
+
+        if (username.isBlank()) {
+            model.addAttribute("warning", "username cant be blank");
+            return "register";
+        }
+
+        if (userService.doesThisUserAlreadyExist(username)) {
+            model.addAttribute("warning", username + " already exists");
+            return "register";
+        }
         userService.createUser(username, password);
         System.out.println(username + " Has been created " + userService.getAllUsers());
         model.addAttribute("message", username + " Has been created ");
@@ -98,9 +108,12 @@ public class UserController {
 
         if (user == null) {
             model.addAttribute("message", "Error message");
+            return "redirect:/home";
         } else {
             userService.createNewDrawing(user, new Drawings(new ArrayList<>(), drawingName, user.getUsername()));
         }
+
+
         System.out.println(userService.getUserByUsername(username));
 
         return "redirect:/home";

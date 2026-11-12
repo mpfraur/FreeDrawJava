@@ -7,6 +7,7 @@ import com.example.demo.model.PositionDTO;
 import com.example.demo.model.Shape;
 import com.example.demo.model.User;
 import com.google.gson.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,6 +15,9 @@ import java.util.List;
 
 @Service
 public class DrawingService {
+
+    @Autowired
+    UserService userService;
 
     public boolean checkIfUserContainsDrawing(User user, int id) {
         return user.getDrawingList().stream().anyMatch(d -> d.getID() == id);
@@ -85,7 +89,13 @@ public class DrawingService {
     }
 
 
-
+    public void saveDrawing(User user, String jsonData, int drawingID) {
+        List<Draw> data = DrawingService.parseJsonService(jsonData);
+        System.out.println(data);
+        userService.updateDrawing(user, drawingID, data);
+        System.out.println("succsessfully saved");
+        System.out.println(user);
+    }
 
 
 

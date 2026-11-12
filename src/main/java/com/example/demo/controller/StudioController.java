@@ -47,11 +47,12 @@ public class StudioController {
         String username = (String) session.getAttribute("username");
         User user = userService.getUserByUsername(username);
         if (user != null) {
-            List<Draw> data = DrawingService.parseJsonService(jsonData);
-            System.out.println(data);
-            userService.updateDrawing(user, drawingID, data);
-            System.out.println("succsessfully saved");
-            System.out.println(user);
+                drawingService.saveDrawing(user, jsonData, drawingID);
+//            List<Draw> data = DrawingService.parseJsonService(jsonData);
+//            System.out.println(data);
+//            userService.updateDrawing(user, drawingID, data);
+//            System.out.println("succsessfully saved");
+//            System.out.println(user);
         }
 
         return "redirect:/home";

@@ -82,5 +82,10 @@ public class UserService {
         return null;
     }
 
+    public boolean doesThisUserAlreadyExist(String username) {
+        User user = getUserByUsername(username);
+        return user != null;
+    }
+
 
 }
