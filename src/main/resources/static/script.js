@@ -100,6 +100,8 @@ function drawShape(mousePosition) {
 
     board.addDraw(shape);
     updateBoard();
+    createInstanceHistory(board);
+    console.log("Here is History!!!" + JSON.stringify(history));
     console.log(DOM);
     console.log(DOM.Board);
 }
@@ -123,6 +125,10 @@ class Board {
 
     removeDraw(index) {
         this.drawsList.splice(index, 1);
+    }
+
+    setBoard(newListBoard) {
+        this.drawsList = newListBoard;
     }
 }
 
@@ -195,9 +201,7 @@ export function redrawCanvas() {
 
 document.addEventListener("keydown", function(event) {
     if (event.ctrlKey && event.key === "z") {
-        board.removeLastDraw();
-        redrawCanvas();
-        updateBoard();
+        revertHistoryPop();
     }
 });
 
@@ -416,3 +420,87 @@ if (sendBoardBtn) {
         enviaFormulari();
     });
 }
+
+// -----------------------------------------------------------------------------------------------------------------------------//
+//                                              History Section
+// -----------------------------------------------------------------------------------------------------------------------------//
+
+
+
+
+
+let history = [];
+
+function createInstanceHistory(board) {
+    let snapshot = new Board([]);
+
+    for (let draw of board.drawsList) {
+        let copy = Object.assign(
+            Object.create(Object.getPrototypeOf(draw)),
+            draw
+        );
+
+        copy.position = { ...draw.position };
+
+        if (draw.pointsArray) {
+            copy.pointsArray = draw.pointsArray.map(point => ({ ...point }));
+        }
+
+        snapshot.drawsList.push(copy);
+    }
+
+    history.push(snapshot);
+}
+
+function getHistory(index) {
+    return history.at(index);
+}
+
+function goBackToSnapShotHistory(index) {
+    let snapshot = getHistory(index);
+
+    if (!snapshot) return;
+
+    board.setBoard(snapshot.drawsList);
+    updateBoard();
+    redrawCanvas();
+}
+
+function revertHistoryPop() {
+    if (history.length < 2) return;
+
+    let snapshot = getHistory(history.length - 1);
+    board.setBoard(snapshot.drawsList);
+    console.log("change has been chnaged too " + history.length - 1);
+    updateBoard();
+    redrawCanvas();
+}
+
+
+window.goBackToSnapShotHistory = goBackToSnapShotHistory;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
