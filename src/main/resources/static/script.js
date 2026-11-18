@@ -10,7 +10,8 @@ const controls = {
 
 let DOM = {
     canvas: document.getElementById("canvas"),
-    controls: controls
+    controls: controls,
+    historyBox: document.getElementById("history")
 };
 
 export let ctx = DOM.canvas ? DOM.canvas.getContext("2d") : null;
@@ -384,6 +385,7 @@ function freeDrawMode() {
         if (!activeLine) return;
         activeLine.isDrawing = false;
         activeLine = null;
+        createInstanceHistory(board);
     }
 
     DOM.canvas.addEventListener("mouseup", finishStroke);
@@ -430,10 +432,10 @@ if (sendBoardBtn) {
 
 
 let history = [];
+createInstanceHistory(board);
 
 function createInstanceHistory(board) {
     let snapshot = new Board([]);
-
     for (let draw of board.drawsList) {
         let copy = Object.assign(
             Object.create(Object.getPrototypeOf(draw)),
@@ -448,8 +450,8 @@ function createInstanceHistory(board) {
 
         snapshot.drawsList.push(copy);
     }
-
     history.push(snapshot);
+    createHistoryRecordDocument();
 }
 
 function getHistory(index) {
@@ -461,7 +463,8 @@ function goBackToSnapShotHistory(index) {
 
     if (!snapshot) return;
 
-    board.setBoard(snapshot.drawsList);
+    board.setBoard([...snapshot.drawsList]);
+    createInstanceHistory(board);
     updateBoard();
     redrawCanvas();
 }
@@ -469,11 +472,43 @@ function goBackToSnapShotHistory(index) {
 function revertHistoryPop() {
     if (history.length < 2) return;
 
-    let snapshot = getHistory(history.length - 1);
-    board.setBoard(snapshot.drawsList);
+    let snapshot = getHistory(history.length - 2);
+    board.setBoard([...snapshot.drawsList]);
+    createInstanceHistory(board);
     console.log("change has been chnaged too " + history.length - 1);
     updateBoard();
     redrawCanvas();
+}
+
+
+function createHistoryRecordDocument() {
+    let historyList = DOM.historyBox;
+    if (!historyList) return;
+    historyList.innerHTML = "";
+
+    for (let i = 0; i < history.length; i++) {
+        let index = i + 1;
+
+        let record = document.createElement("li");
+        record.className = "list-group-item bg-dark text-light border-secondary d-flex justify-content-between align-items-center";
+
+        let text = document.createElement("p");
+        text.className = "mb-0";
+        text.textContent = "Snapshot number: " + index;
+
+        let revertButton = document.createElement("button");
+        revertButton.className = "btn btn-outline-light btn-sm";
+        revertButton.textContent = "Revert";
+
+        revertButton.addEventListener("click", function() {
+            goBackToSnapShotHistory(i);
+            createHistoryRecordDocument();
+        });
+
+        record.appendChild(text);
+        record.appendChild(revertButton);
+        historyList.appendChild(record);
+    }
 }
 
 
