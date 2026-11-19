@@ -1,12 +1,12 @@
 create table Users (
-   user_id int primary key,
+   user_id int primary key auto_increment,
    username varchar(50) not null unique,
    pass varchar(255) not null
 );
 
 
 create table Drawings (
-  drawing_id int primary key,
+  drawing_id int primary key auto_increment,
   user_id int not null,
   name varchar(255) not null,
   creation_date timestamp default current_timestamp,
@@ -37,4 +37,4 @@ create table Permissions (
 );
 
 
-insert into Users (user_id, username, pass) values (1, 'Mod', '1234');
+insert into Users (username, pass) values ('Mod', '1234');

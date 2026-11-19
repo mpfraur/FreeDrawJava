@@ -11,4 +11,5 @@ public interface UserRepository {
     User save(User newUser);
     List<User> getAllUsers();
     Map<String, User> getAllUsersHashMap();
+    List<User> getAllUsersFromDatabase();
 }

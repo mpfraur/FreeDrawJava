@@ -6,6 +6,7 @@ import com.example.demo.model.Drawings;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,15 +25,16 @@ public class UserService {
         }
 
         User newUser = new User(username, password);
+
         return userRepository.save(newUser);
     }
 
     public List<User> getAllUsers() {
-        return userRepository.getAllUsers();
+        return userRepository.getAllUsersFromDatabase();
     }
 
     public boolean doesUserExist(String username) {
-        return userRepository.getAllUsers().stream().anyMatch(existingUser -> existingUser.getUsername().equals(username));
+        return userRepository.getAllUsersFromDatabase().stream().anyMatch(existingUser -> existingUser.getUsername().equals(username));
     }
 
     public boolean authenticated(String username, String password) {
@@ -73,7 +75,7 @@ public class UserService {
     }
 
     public User getUserByUsername(String name) {
-        List<User> repo = userRepository.getAllUsers();
+        List<User> repo = userRepository.getAllUsersFromDatabase();
         for (int i = 0; i < repo.size(); i++) {
             if (repo.get(i).getUsername().equals(name)) {
                 return repo.get(i);

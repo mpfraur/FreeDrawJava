@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class User {
+    static int idCount;
+    int id;
     String username;
     String password;
     List<Drawings> drawingsList;
@@ -12,6 +14,7 @@ public class User {
         this.username = username;
         this.password = password;
         drawingsList = new ArrayList<>();
+        this.id = idCount++;
     }
 
     public String getUsername() {
@@ -34,10 +37,26 @@ public class User {
         return this.drawingsList;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public List<Drawings> getDrawingsList() {
+        return drawingsList;
+    }
+
+    public void setDrawingsList(List<Drawings> drawingsList) {
+        this.drawingsList = drawingsList;
+    }
+
     @Override
     public String toString() {
         return "User{" +
-                "username='" + username + '\'' +
+                "username='" + username + '\'' + this.id +
                 ", password='" + password + " Drawings: " + drawingsList + '\'' +
                 '}';
     }
