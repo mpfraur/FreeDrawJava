@@ -70,6 +70,15 @@ public class DrawingsRepositoryImpl implements DrawingsRepository {
     }
 
     @Override
+    public List<DrawingObject> findAll() {
+        List<DrawingObject> drawings = database.query(
+                "select * from Drawings",
+                new BeanPropertyRowMapper<>(DrawingObject.class)
+        );
+        return drawings;
+    }
+
+    @Override
     public void delete(int drawingID) {
         database.update("delete from Drawings where Drawings.drawing_id = ?", drawingID);
     }

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+</head>
+<body>
+
+<form action="">
+    <input type="text">
+    <input type="submit" value="Create">
+</form>
+    <div>
+        <h1>My Drawings</h1>
+        <li>
+            <ul th:each="drawing, status : ${drawings}">
+
+            </ul>
+        </li>
+    </div>
+    <div>
+        <h1>Shared with me</h1>
+        <li></li>
+    </div>
+    <div>
+        <h1>Trash Bin Drawings</h1>
+        <li></li>
+    </div>
+</body>
+</html>

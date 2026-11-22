@@ -13,6 +13,7 @@ public interface DrawingsRepository {
     void update(DrawingObject drawing);
     void delete(int drawingID);
     boolean existsById(int drawingID);
+    List<DrawingObject> findAll();
 
     void saveVersion(int drawingId, String jsonData);
     List<Drawing_versionObject> findVersionByID(int drawingId);
