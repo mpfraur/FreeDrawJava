@@ -20,6 +20,10 @@ public class DrawingObjectService {
         this.drawingsRepository = drawingsRepository;
     }
 
+    public DrawingObject getDrawingByID(int drawingID) {
+        return drawingsRepository.findById(drawingID);
+    }
+
     public List<DrawingObject> getUsersDrawingByID(int userID) {
         List<DrawingObject> list = drawingsRepository.findAllByUserId(userID);
         return list;
@@ -41,7 +45,7 @@ public class DrawingObjectService {
     public List<DrawingObject> drawingsInTheBin(int userID) {
         return drawingsRepository.findAllByUserId(userID).stream().filter(d -> d.getDeleted_at() != null).toList();
     }
-
+    // ----------- Parse into DTO
     public SharedDrawingDTO parseDrawingIntoDTO(DrawingObject drawing, int userID) {
         PermissionsObject permission =
                 drawingsRepository.findPermission(drawing.getDrawing_id(), userID);
@@ -49,6 +53,12 @@ public class DrawingObjectService {
         return new SharedDrawingDTO(permission, drawing);
     }
 
+    // ------------ Restore deleted one!
+    public void restoreDeletedDrawing(int drawingID) {
+        DrawingObject drawing = drawingsRepository.findById(drawingID);
+        drawing.setDeleted_at(null);
+        drawingsRepository.update(drawing);
+    }
 
 
 

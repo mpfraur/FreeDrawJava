@@ -14,6 +14,7 @@ public class Drawing_versionObject {
         this.drawing_data = drawing_data;
         this.created_at = created_at;
     }
+    public Drawing_versionObject() {}
 
     public int getVersion_id() {
         return version_id;

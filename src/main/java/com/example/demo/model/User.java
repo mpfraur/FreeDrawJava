@@ -14,7 +14,6 @@ public class User {
         this.username = username;
         this.password = password;
         drawingsList = new ArrayList<>();
-        this.id = idCount++;
     }
 
     public String getUsername() {

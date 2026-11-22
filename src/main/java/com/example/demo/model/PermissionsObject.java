@@ -13,6 +13,8 @@ public class PermissionsObject {
         this.permission_type = permission_type;
     }
 
+    public PermissionsObject() {}
+
     public PermissionType getPermission_type() {
         return permission_type;
     }

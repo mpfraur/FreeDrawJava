@@ -45,10 +45,14 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public List<User> getAllUsersFromDatabase() {
-        List<User> AllUsers = database.query("select * from Users",
-                (rs, rowNum) -> new User(rs.getString("username"), rs.getString("pass"))
+        List<User> allUsers = database.query("select * from Users",
+                (rs, rowNum) -> {
+                    User user = new User(rs.getString("username"), rs.getString("pass"));
+                    user.setId(rs.getInt("user_id"));
+                    return user;
+                }
         );
-        return AllUsers;
+        return allUsers;
     }
 
     public boolean contains(String username) {

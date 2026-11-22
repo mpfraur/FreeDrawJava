@@ -13,7 +13,13 @@ export function navBar() {
     gallery.className = "btn btn-outline-light";
     gallery.onclick = () => window.location.href = "/galleries/list";
 
-    nav.append(home, gallery);
+    let dashboard = document.createElement("button");
+    dashboard.innerText = "Dashboard";
+    dashboard.className = "btn btn-outline-light";
+    dashboard.onclick = () => window.location.href = "/app/dashboard";
+
+    console.log("Appended DASH!")
+    nav.append(home, gallery, dashboard);
 
     return nav;
 }

@@ -28,7 +28,7 @@ public class DrawingsRepositoryImpl implements DrawingsRepository {
                 "insert into Drawings (user_id, name, status) values (?, ?, ?)",
                 drawing.getUser_id(),
                 drawing.getName(),
-                drawing.getStatus().name().toLowerCase()
+                drawing.getStatus().name()
         );
         return drawing;
     }
@@ -41,19 +41,19 @@ public class DrawingsRepositoryImpl implements DrawingsRepository {
 //                        rs.getString("name")
 //                ),
 //                );
-        DrawingObject drawing = database.queryForObject("select * from Drawings where Drawings.drawing_id = ? limit 1;", new BeanPropertyRowMapper<>(DrawingObject.class), drawingID);
+        DrawingObject drawing = database.queryForObject("select * from Drawings where drawing_id = ? limit 1", new BeanPropertyRowMapper<>(DrawingObject.class), drawingID);
         return drawing;
     }
 
     @Override
     public List<DrawingObject> findAllByUserId(int userID) {
-        List<DrawingObject> userDrawings = database.query("select * from Drawings where Drawings.user_id = ?", new BeanPropertyRowMapper<>(DrawingObject.class), userID);
+        List<DrawingObject> userDrawings = database.query("select * from Drawings where user_id = ?", new BeanPropertyRowMapper<>(DrawingObject.class), userID);
         return userDrawings;
     }
 
     @Override
     public List<DrawingObject> findAllPublic() {
-        List<DrawingObject> allPublic = database.query("select * from Drawings where Drawings.status = 'public'", new BeanPropertyRowMapper<>(DrawingObject.class));
+        List<DrawingObject> allPublic = database.query("select * from Drawings where status = 'PUBLIC'", new BeanPropertyRowMapper<>(DrawingObject.class));
         return allPublic;
     }
 
@@ -63,7 +63,7 @@ public class DrawingsRepositoryImpl implements DrawingsRepository {
                 drawing.getUser_id(),
                 drawing.getName(),
                 drawing.getCreation_date(),
-                drawing.getStatus().name().toLowerCase(),
+                drawing.getStatus().name(),
                 drawing.getDeleted_at(),
                 drawing.getDrawing_id()
         );
@@ -118,14 +118,14 @@ public class DrawingsRepositoryImpl implements DrawingsRepository {
 
     @Override
     public void createPermission(int drawingId, int userId, PermissionType permissionType) {
-        database.update("insert into Permissions (user_id, drawing_id, permission_type) values (?, ?, ?)", userId, drawingId, permissionType.name().toLowerCase());
+        database.update("insert into Permissions (user_id, drawing_id, permission_type) values (?, ?, ?)", userId, drawingId, permissionType.name());
     }
 
     @Override
     public void updatePermission(int drawingId, int userId, PermissionType permissionType) {
         database.update(
                 "update Permissions set permission_type = ? where drawing_id = ? and user_id = ?",
-                permissionType.name().toLowerCase(),
+                permissionType.name(),
                 drawingId,
                 userId
         );
@@ -172,7 +172,7 @@ public class DrawingsRepositoryImpl implements DrawingsRepository {
         } catch (EmptyResultDataAccessException e) {
             return false;
         }
-        return permission.getPermission_type().name().equalsIgnoreCase("read");
+        return permission.getPermission_type() == PermissionsObject.PermissionType.READ;
     }
 
     @Override
@@ -183,7 +183,7 @@ public class DrawingsRepositoryImpl implements DrawingsRepository {
         } catch (EmptyResultDataAccessException e) {
             return false;
         }
-        return permission.getPermission_type().name().equalsIgnoreCase("write");
+        return permission.getPermission_type() == PermissionsObject.PermissionType.WRITE;
     }
 
     public enum PermissionType {

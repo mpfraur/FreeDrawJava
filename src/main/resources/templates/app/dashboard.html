@@ -12,19 +12,51 @@
 </form>
     <div>
         <h1>My Drawings</h1>
-        <li>
-            <ul th:each="drawing, status : ${drawings}">
+        <ul>
+            <li th:each="drawing, status : ${drawings}">
 
-            </ul>
-        </li>
+                <span th:text="${drawing.name}"></span>
+
+                <div>
+                    <form method="POST" th:action="@{/home/delete}">
+                        <input type="hidden" name="drawingID" th:value="${drawing.drawing_id}">
+                        <input type="submit" value="Delete">
+                    </form>
+
+                    <form method="GET" th:action="@{/studio/canva/{id}(id=${drawing.drawing_id})}">
+                        <input type="submit" value="Edit">
+                    </form>
+                </div>
+            </li>
+        </ul>
     </div>
     <div>
         <h1>Shared with me</h1>
-        <li></li>
+        <ul>
+            <li th:each="drawing : ${shared}" th:if="${drawing.perm().permission_type.name() == 'WRITE'}">
+                <span th:text="${drawing.drawingObject().getName()}"></span>
+                <form method="GET" th:action="@{/studio/canva/{id}(id=${drawing.drawingObject().drawing_id})}">
+                    <input type="submit" value="Edit">
+                </form>
+            </li>
+            <li th:each="drawing : ${shared}" th:unless="${drawing.perm().permission_type.name() == 'WRITE'}">
+                <span th:text="${drawing.drawingObject().getName()}"></span>
+                <form method="GET" th:action="@{/galleries/canvaview/{id}(id=${drawing.drawingObject().drawing_id})}">
+                    <input type="submit" value="view">
+                </form>
+            </li>
+        </ul>
     </div>
     <div>
         <h1>Trash Bin Drawings</h1>
-        <li></li>
+        <ul th:each="deletedDrawings : ${bin}">
+            <span th:text="${deletedDrawings.getName()}"></span>
+            <span th:text="'Deleted at: ' + ${deletedDrawings.getDeleted_at()}"></span>
+            <form th:action="@{/app/restore}" method="post">
+                <input type="hidden" th:value="${deletedDrawings.drawing_id}" name="drawingID">
+                <input type="submit" value="Restore">
+            </form>
+        </ul>
     </div>
 </body>
 </html>

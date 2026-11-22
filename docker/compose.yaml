@@ -5,12 +5,11 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./mysqlData:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
       - ../src/main/resources/db/tables.sql:/docker-entrypoint-initdb.d/tables.sql:ro
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: root
-
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -20,3 +19,6 @@ services:
     environment:
       PMA_HOST: mysql
       UPLOAD_LIMIT: 300M
+
+volumes:
+  mysql_data:

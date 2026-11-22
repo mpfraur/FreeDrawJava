@@ -7,16 +7,31 @@ public class DrawingObject {
     int user_id;
     String name;
     LocalDateTime creation_date;
-    Permission status;
+    Status status;
     LocalDateTime deleted_at;
 
-    public DrawingObject(int drawing_id, int user_id, String name, LocalDateTime creation_date, Permission status, LocalDateTime deleted_at) {
+    @Override
+    public String toString() {
+        return "DrawingObject{" +
+                "drawing_id=" + drawing_id +
+                ", user_id=" + user_id +
+                ", name='" + name + '\'' +
+                ", creation_date=" + creation_date +
+                ", status=" + status +
+                ", deleted_at=" + deleted_at +
+                '}';
+    }
+
+    public DrawingObject(int drawing_id, int user_id, String name, LocalDateTime creation_date, Status status, LocalDateTime deleted_at) {
         this.drawing_id = drawing_id;
         this.user_id = user_id;
         this.name = name;
         this.creation_date = creation_date;
         this.status = status;
         this.deleted_at = deleted_at;
+    }
+
+    public DrawingObject() {
     }
 
     public int getDrawing_id() {
@@ -51,11 +66,11 @@ public class DrawingObject {
         this.creation_date = creation_date;
     }
 
-    public Permission getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(Permission status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
@@ -67,7 +82,7 @@ public class DrawingObject {
         this.deleted_at = deleted_at;
     }
 
-    public enum Permission {
+    public enum Status {
         PUBLIC,
         PRIVATE
     }
