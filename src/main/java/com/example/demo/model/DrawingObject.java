@@ -31,6 +31,12 @@ public class DrawingObject {
         this.deleted_at = deleted_at;
     }
 
+    public DrawingObject(int user_id, String name, Status status) {
+        this.user_id = user_id;
+        this.name = name;
+        this.status = status;
+    }
+
     public DrawingObject() {
     }
 

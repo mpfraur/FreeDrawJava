@@ -5,3 +5,4 @@ import com.example.demo.model.PermissionsObject;
 
 public record SharedDrawingDTO(PermissionsObject perm, DrawingObject drawingObject) {
 }
+

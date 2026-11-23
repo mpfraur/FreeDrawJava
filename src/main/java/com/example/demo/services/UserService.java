@@ -89,5 +89,11 @@ public class UserService {
         return user != null;
     }
 
+    public User getUserByID(int id) {
+        List<User> users = userRepository.getAllUsersFromDatabase();
+        User retUser = users.stream().filter(u -> u.getId() == id).findFirst().orElse(null);
+        return retUser;
+    }
+
 
 }

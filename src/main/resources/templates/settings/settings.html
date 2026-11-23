@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Drawing Settings</title>
+</head>
+<body>
+    <h1>Drawing Settings</h1>
+    <h2 th:text="'Drawing name: ' + ${drawing.getName()}"></h2>
+    <h3 th:text="'Drawing id: ' + ${drawing.drawing_id}"></h3>
+
+    <div id="info">
+        <p th:text="'Drawing Deleted status: ' + ${drawing.getDeleted_at()}" th:if="${drawing.getDeleted_at() != null}"></p>
+        <p th:unless="${drawing.deleted_at != null}">Not deleted</p>
+        <p th:text="'Drawing Owners User ID: ' + ${drawing.getUser_id()}"></p>
+        <p th:text="'created At: ' + ${drawing.getCreation_date()}"></p>
+    </div>
+
+    <div id="sharedList">
+        <h2>Users with Permissions</h2>
+        <ul>
+            <li th:each="shared : ${sharedUsers}">
+                <p th:text="${shared.user?.username} + ' - ' + ${shared.permission.permission_type}"></p>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>
