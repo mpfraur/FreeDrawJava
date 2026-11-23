@@ -88,4 +88,6 @@ public class HomeController {
         drawingObjectService.createNewDrawing(user.getId(), drawingName, visibility);
         return "redirect:/app/dashboard";
     }
+
+
 }

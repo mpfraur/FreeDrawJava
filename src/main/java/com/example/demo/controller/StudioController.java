@@ -1,8 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.Draw;
+import com.example.demo.model.DrawingObject;
 import com.example.demo.model.Drawings;
 import com.example.demo.model.User;
+import com.example.demo.services.DrawingObjectService;
 import com.example.demo.services.DrawingService;
 import com.example.demo.services.UserService;
 import com.google.gson.Gson;
@@ -22,24 +24,33 @@ public class StudioController {
     private UserService userService;
     @Autowired
     private DrawingService drawingService;
+    @Autowired
+    private DrawingObjectService drawingObjectService;
 
 
     @GetMapping("/canva/{id}")
     public String openEditController(@PathVariable("id") int id, Model model, HttpSession session) {
         String username = (String) session.getAttribute("username");
         User user = userService.getUserByUsername(username);
-        if (user != null) {
-            model.addAttribute("drawingID", id);
 
-            Drawings drawingData = user.getDrawingByID(id);
-            if (drawingData != null) {
-                String drawingDataSetAsJSON = new Gson().toJson(drawingData);
-                model.addAttribute("JSON_test_print", drawingDataSetAsJSON);
-            }
+        if (user == null) return "redirect:/login";
 
-            return "studio/canvas";
+        DrawingObject drawing = drawingObjectService.getDrawingByID(id);
+
+        if (drawing == null) return "redirect:/error404";
+
+        boolean isOwner = drawing.getUser_id() == user.getId();
+        boolean hasWritePermission = drawingObjectService.checkForPermissionByUser(user.getId(), id);
+
+        if (!isOwner && !hasWritePermission) {
+            return "redirect:/app/dashboard";
         }
-        return "redirect:/home";
+
+        model.addAttribute("drawingID", id);
+
+        // Load drawing content here
+
+        return "studio/canvas";
     }
 
     @PostMapping("/canvas/save")

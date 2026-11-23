@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Drawing Settings</title>
@@ -18,9 +18,32 @@
 
     <div id="sharedList">
         <h2>Users with Permissions</h2>
+        <form method="post" th:action="@{/settings/addpermission}">
+            <label for="userSearch">Make user have Permission</label>
+            <input type="text" id="userSearch" name="username">
+            <input type="hidden" th:value="${drawing.drawing_id}" name="drawingId">
+
+            <label for="Write">Can Edit</label>
+            <input type="radio" id="Write" name="permission" value="true" required>
+
+            <label for="Read">Can View</label>
+            <input type="radio" id="Read" name="permission" value="false">
+
+            <input type="submit">
+        </form>
+        <p id="Error" th:text="${error}" th:if="${error}"></p>
+
         <ul>
             <li th:each="shared : ${sharedUsers}">
                 <p th:text="${shared.user?.username} + ' - ' + ${shared.permission.permission_type}"></p>
+                <form method="post" th:action="@{/settings/revoke}">
+                    <input type="hidden" name="drawingId" th:value="${drawing.drawing_id}">
+                    <input type="hidden" name="userId" th:value="${shared.user.id}">
+
+                    <input type="submit" value="Revoke">
+                </form>
+
+
             </li>
         </ul>
     </div>

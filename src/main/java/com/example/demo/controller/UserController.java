@@ -146,6 +146,11 @@ public class UserController {
         return "gallery";
     }
 
+    @GetMapping("/error404")
+    public String error() {
+        return "error404";
+    }
+
 
 
 

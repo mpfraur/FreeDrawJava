@@ -7,6 +7,7 @@ import com.example.demo.model.DrawingObject;
 import com.example.demo.model.PermissionsObject;
 import com.example.demo.model.User;
 import com.example.demo.repository.DrawingsRepository;
+import com.example.demo.repository.DrawingsRepositoryImpl;
 import com.example.demo.repository.UserRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -83,6 +84,10 @@ public class DrawingObjectService {
         drawingsRepository.save(drawing);
     }
 
+
+    // ------------- PERMISSIONS SECTION ------------------
+
+
     // ------------ Fetch all Permissions based on a Drawing
     public List<SharedUserDTO> parsePermissionDTO(List<PermissionsObject> permissions) {
         return new ArrayList<SharedUserDTO>(permissions.stream().map(p -> new SharedUserDTO(p, userService.getUserByID(p.getUser_id()))).toList());
@@ -101,6 +106,39 @@ public class DrawingObjectService {
                 })
                 .toList();
     }
+
+
+    // ------------- Create new Permission to User
+    public void createNewPermission(String username, int drawingID, int ownerID, DrawingsRepositoryImpl.PermissionType permission) {
+        User userPerm = userService.getUserByUsername(username);
+        DrawingObject drawing = getDrawingByID(drawingID);
+        // make sure User and owner is not the same user
+        if (drawing != null && userPerm != null && drawing.getUser_id() == ownerID && userPerm.getId() != ownerID) {
+            drawingsRepository.createPermission(drawingID, userPerm.getId(), permission);
+        }
+    }
+
+    // ------------- Revoke user Permission
+    public void revokeUserPermission(int userID, int drawingId) {
+        drawingsRepository.deletePermission(drawingId, userID);
+    }
+
+    // -------------- check for Permission WRITE
+    public boolean checkForPermissionByUser(int userId, int drawingId) {
+        PermissionsObject permission = drawingsRepository.findPermission(drawingId, userId);
+        if (permission != null) {
+            if (permission.getPermission_type() != PermissionsObject.PermissionType.READ) {
+                System.out.println("permission successful");
+                return true;
+            }
+        }
+        System.out.println("User: " + userId + " Tried to go in " + drawingId + " unauthorized");
+        return false;
+    }
+
+    // -------------------- VERSIONS SECTION ----------------------------- //
+
+
 
 
 
