@@ -17,27 +17,26 @@ let DOM = {
 };
 
 export function parcingToBoard(drawingData) {
-    let contentList = drawingData;
-
-    for (let i = 0; i < contentList.length; i++) {
-        let objectShapeDTO = contentList[i];
-        if ("shapeName" in objectShapeDTO) {
-            let size = objectShapeDTO.size || 10;
-            let newShape = new Shape(objectShapeDTO.shapeName, objectShapeDTO.isFilled, objectShapeDTO.color, objectShapeDTO.lineWidth, objectShapeDTO.position, ctx, size);
-            board.addDraw(newShape);
+    for (const d of drawingData) {
+        const shapeName = d.shape ?? d.shapeName;
+        if (shapeName) {
+            board.addDraw(new Shape(shapeName, d.isFilled, d.color, d.lineWidth, d.position, ctx, d.size || 10));
+        } else if (Array.isArray(d.pointsArray) && d.pointsArray.length > 0) {
+            board.addDraw(new FreeDraw(d.color, d.lineWidth, d.position, ctx, d.isDrawing, d.pointsArray));
         } else {
-            let objectFreeDrawDTO = contentList[i];
-            let newFreeDraw = new FreeDraw(objectFreeDrawDTO.color, objectFreeDrawDTO.lineWidth, objectFreeDrawDTO.position, ctx, objectFreeDrawDTO.isDrawing, objectFreeDrawDTO.pointsArray);
-            board.addDraw(newFreeDraw);
+            console.warn("Skipping unrecognised entry:", d);
         }
     }
 }
 
 const jsonStringEl = document.getElementById("JsonString");
-if (jsonStringEl) {
-    let drawingData = JSON.parse(jsonStringEl.textContent);
-    console.log(drawingData);
-    parcingToBoard(drawingData);
-    updateBoard();
-    redrawCanvas();
+const raw = jsonStringEl?.textContent.trim();
+if (raw) {
+    try {
+        parcingToBoard(JSON.parse(raw));
+        updateBoard();
+        redrawCanvas();
+    } catch (e) {
+        console.error("Failed to load drawing", e);
+    }
 }

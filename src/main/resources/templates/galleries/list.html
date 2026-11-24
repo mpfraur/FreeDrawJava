@@ -14,12 +14,12 @@
         <li class="list-group-item bg-dark text-light border-secondary mb-2 rounded"
             th:each="drawing : ${drawingsList}">
 
-            <p th:text="'ID: ' + ${drawing.ID}"></p>
-            <p th:text="'Name: ' + ${drawing.name}"></p>
-            <p th:text="'User: ' + ${drawing.user}"></p>
-            <p th:text="'Draws: ' + ${drawing.amountOFDraws}"></p>
+            <p th:text="'ID: ' + ${drawing.drawing.drawing_id}"></p>
+            <p th:text="'Name: ' + ${drawing.drawing.name}"></p>
+            <p th:text="'User: ' + ${drawing.user.username}"></p>
+            <p th:text="'Draws: ' + ${drawing.sizeOfDrawing}"></p>
 
-            <form method="get" th:action="@{/galleries/canvaview/{id}(id=${drawing.ID})}">
+            <form method="get" th:action="@{/galleries/canvaview/{id}(id=${drawing.drawing.drawing_id})}">
                 <input class="btn btn-primary btn-sm" type="submit" value="View">
             </form>
         </li>

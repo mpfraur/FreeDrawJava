@@ -4,14 +4,11 @@ import com.example.demo.model.*;
 import com.example.demo.services.DrawingObjectService;
 import com.example.demo.services.DrawingService;
 import com.example.demo.services.UserService;
-import com.google.gson.Gson;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/studio")
@@ -37,7 +34,7 @@ public class StudioController {
         if (drawing == null) return "redirect:/error404";
 
         boolean isOwner = drawing.getUser_id() == user.getId();
-        boolean hasWritePermission = drawingObjectService.checkForPermissionByUser(user.getId(), id);
+        boolean hasWritePermission = drawingObjectService.checkForPermissionReadByUser(user.getId(), id);
 
         if (!isOwner && !hasWritePermission) {
             return "redirect:/app/dashboard";
@@ -61,9 +58,9 @@ public class StudioController {
         User user = userService.getUserByUsername(username);
         DrawingObject drawing = drawingObjectService.getDrawingByID(drawingID);
         if (user == null || drawing == null) return "redirect:/login";
-        boolean autherized = drawing.getUser_id() == user.getId() || drawingObjectService.checkForPermissionByUser(user.getId(), drawingID);
+        boolean authorized = drawing.getUser_id() == user.getId() || drawingObjectService.checkForPermissionWriteByUser(user.getId(), drawingID);
 
-        if (autherized) {
+        if (authorized) {
                 //drawingService.saveDrawing(user, jsonData, drawingID);
                 drawingObjectService.createNewVersion(drawingID, jsonData);
             System.out.println("successfully Saved by user " + user.getUsername() + " by drawing ID " + drawing.getDrawing_id());
