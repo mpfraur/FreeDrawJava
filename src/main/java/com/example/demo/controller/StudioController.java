@@ -1,9 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.Draw;
-import com.example.demo.model.DrawingObject;
-import com.example.demo.model.Drawings;
-import com.example.demo.model.User;
+import com.example.demo.model.*;
 import com.example.demo.services.DrawingObjectService;
 import com.example.demo.services.DrawingService;
 import com.example.demo.services.UserService;
@@ -49,6 +46,11 @@ public class StudioController {
         model.addAttribute("drawingID", id);
 
         // Load drawing content here
+        Drawing_versionObject latestVersion = drawingObjectService.fetchLatestVersion(id);
+        if (latestVersion != null) {
+            model.addAttribute("JSON_test_print", latestVersion.getDrawing_data());
+        }
+
 
         return "studio/canvas";
     }
@@ -57,8 +59,14 @@ public class StudioController {
     public String fetchDataSaveStringJSON(@RequestParam String jsonData, HttpSession session, @RequestParam int drawingID) {
         String username = (String) session.getAttribute("username");
         User user = userService.getUserByUsername(username);
-        if (user != null) {
-                drawingService.saveDrawing(user, jsonData, drawingID);
+        DrawingObject drawing = drawingObjectService.getDrawingByID(drawingID);
+        if (user == null || drawing == null) return "redirect:/login";
+        boolean autherized = drawing.getUser_id() == user.getId() || drawingObjectService.checkForPermissionByUser(user.getId(), drawingID);
+
+        if (autherized) {
+                //drawingService.saveDrawing(user, jsonData, drawingID);
+                drawingObjectService.createNewVersion(drawingID, jsonData);
+            System.out.println("successfully Saved by user " + user.getUsername() + " by drawing ID " + drawing.getDrawing_id());
 //            List<Draw> data = DrawingService.parseJsonService(jsonData);
 //            System.out.println(data);
 //            userService.updateDrawing(user, drawingID, data);
@@ -66,7 +74,7 @@ public class StudioController {
 //            System.out.println(user);
         }
 
-        return "redirect:/home";
+        return "redirect:/app/dashboard";
     }
 }
 

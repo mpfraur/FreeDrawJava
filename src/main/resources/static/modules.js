@@ -17,7 +17,7 @@ let DOM = {
 };
 
 export function parcingToBoard(drawingData) {
-    let contentList = drawingData.content;
+    let contentList = drawingData;
 
     for (let i = 0; i < contentList.length; i++) {
         let objectShapeDTO = contentList[i];

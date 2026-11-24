@@ -2,10 +2,7 @@ package com.example.demo.services;
 
 import com.example.demo.DTO.SharedDrawingDTO;
 import com.example.demo.DTO.SharedUserDTO;
-import com.example.demo.model.Draw;
-import com.example.demo.model.DrawingObject;
-import com.example.demo.model.PermissionsObject;
-import com.example.demo.model.User;
+import com.example.demo.model.*;
 import com.example.demo.repository.DrawingsRepository;
 import com.example.demo.repository.DrawingsRepositoryImpl;
 import com.example.demo.repository.UserRepositoryImpl;
@@ -138,8 +135,15 @@ public class DrawingObjectService {
 
     // -------------------- VERSIONS SECTION ----------------------------- //
 
+    // --------- Create new Drawing version
+    public void createNewVersion(int drawingId, String jsonData) {
+        drawingsRepository.saveVersion(drawingId, jsonData);
+    }
 
-
+    // -------- fetching Latest Drawing Version
+    public Drawing_versionObject fetchLatestVersion(int drawingId) {
+        return drawingsRepository.getLatestVersion(drawingId);
+    }
 
 
 
