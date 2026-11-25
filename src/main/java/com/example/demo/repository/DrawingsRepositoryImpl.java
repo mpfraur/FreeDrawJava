@@ -95,9 +95,15 @@ public class DrawingsRepositoryImpl implements DrawingsRepository {
     }
 
     @Override
-    public List<Drawing_versionObject> findVersionByID(int drawingId) {
+    public List<Drawing_versionObject> findVersionsByID(int drawingId) {
         List<Drawing_versionObject> versions = database.query("select * from Drawing_versions where Drawing_versions.drawing_id = ?", new BeanPropertyRowMapper<>(Drawing_versionObject.class), drawingId);
         return versions;
+    }
+
+    @Override
+    public Drawing_versionObject getVersionByID(int drawingId, int versionId) {
+        Drawing_versionObject version = database.queryForObject("select * from Drawing_version where drawing_id = ? and version_id = ? limit 1", new BeanPropertyRowMapper<>(Drawing_versionObject.class), drawingId, versionId);
+        return version;
     }
 
     @Override

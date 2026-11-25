@@ -2,7 +2,6 @@ package com.example.demo.repository;
 
 import com.example.demo.model.*;
 
-import java.security.Permission;
 import java.util.List;
 
 public interface DrawingsRepository {
@@ -16,7 +15,8 @@ public interface DrawingsRepository {
     List<DrawingObject> findAll();
 
     void saveVersion(int drawingId, String jsonData);
-    List<Drawing_versionObject> findVersionByID(int drawingId);
+    List<Drawing_versionObject> findVersionsByID(int drawingId);
+    Drawing_versionObject getVersionByID(int drawingId, int versionId);
     Drawing_versionObject getLatestVersion(int drawingId);
     void deleteVersions(int drawingID);
 

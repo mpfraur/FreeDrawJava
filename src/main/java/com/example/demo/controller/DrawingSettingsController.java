@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.DTO.SharedDrawingDTO;
 import com.example.demo.DTO.SharedUserDTO;
 import com.example.demo.model.DrawingObject;
+import com.example.demo.model.Drawing_versionObject;
 import com.example.demo.model.PermissionsObject;
 import com.example.demo.model.User;
 import com.example.demo.repository.DrawingsRepositoryImpl;
@@ -36,7 +37,10 @@ public class DrawingSettingsController {
         model.addAttribute("drawing", drawing);
 
         List<SharedUserDTO> sharedUserList = drawingObjectService.getPermissionByDrawingID(drawingID);
+        List<Drawing_versionObject> versions = drawingObjectService.getAllDrawingVersions(drawingID);
+
         model.addAttribute("sharedUsers", sharedUserList);
+        model.addAttribute("versions", versions);
         return "settings/settings";
     }
 
@@ -76,6 +80,21 @@ public class DrawingSettingsController {
         if (drawing == null || drawing.getUser_id() != owner.getId()) return "redirect:/error404";
         drawingObjectService.revokeUserPermission(userId, drawingId);
         return "redirect:/settings/" + drawingId;
+    }
+
+    @PostMapping("/copy")
+    public String createCopyDrawingController(HttpSession session, @RequestParam int drawingId, @RequestParam boolean isPrivate, @RequestParam int versionID) {
+        User user = userService.getUserByUsername((String) session.getAttribute("username"));
+        DrawingObject drawing = drawingObjectService.getDrawingByID(drawingId);
+        Drawing_versionObject version = drawingObjectService.getVersionByID(versionID, drawingId);
+        if (version == null || user == null || drawing == null) return "redirect:/dashboard";
+        if (isPrivate) {
+           // HERE WORK HERE PLEASE!!!
+        }
+        // drawingObjectService.createNewDrawingFromPrevDrawing(versionID, drawingId, user.getId(), is);
+
+
+        return "redirect:/app/dashboard";
     }
 
 

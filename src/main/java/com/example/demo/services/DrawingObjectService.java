@@ -170,6 +170,9 @@ public class DrawingObjectService {
 
     // -------------------- VERSIONS SECTION ----------------------------- //
 
+
+
+
     // --------- Create new Drawing version
     public void createNewVersion(int drawingId, String jsonData) {
         drawingsRepository.saveVersion(drawingId, jsonData);
@@ -178,6 +181,32 @@ public class DrawingObjectService {
     // -------- fetching Latest Drawing Version
     public Drawing_versionObject fetchLatestVersion(int drawingId) {
         return drawingsRepository.getLatestVersion(drawingId);
+    }
+
+    // --------- Get All Versions
+    public List<Drawing_versionObject> getAllDrawingVersions(int drawingId) {
+        return drawingsRepository.findVersionsByID(drawingId);
+    }
+
+    // --------- Gets Version based off version and drawingID
+    public Drawing_versionObject getVersionByID(int versionId, int drawingId) {
+        return drawingsRepository.getVersionByID(drawingId, versionId);
+    }
+
+    // ----------- Reverting Drawing on Version ID
+    public void createNewDrawingFromPrevDrawing(int versionDrawingId, int drawingId, int userId, DrawingObject.Status status) {
+        DrawingObject drawing = getDrawingByID(drawingId);
+        if (drawing != null) {
+            Drawing_versionObject version = drawingsRepository.getVersionByID(drawingId, versionDrawingId);
+            User user = userService.getUserByID(userId);
+            boolean isAuthorizedWrite = checkForPermissionWriteByUser(userId, drawingId);
+            boolean isAuthorizedRead = checkForPermissionReadByUser(userId, drawingId);
+            boolean isOwner = (userId == drawing.getUser_id());
+
+            if (isAuthorizedRead || isAuthorizedWrite || isOwner) {
+                createNewDrawing(userId, "Copy of : " + drawing.getName(), status);
+            }
+        }
     }
 
 

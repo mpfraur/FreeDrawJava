@@ -46,6 +46,17 @@
 
             </li>
         </ul>
+
+        <h3>Drawing Versions</h3>
+        <ul>
+            <li th:each="version, index : ${versions}">
+                <p th:text="${index.count} + 'Created at : ' + ${version.created_at}"></p>
+                <form action="">
+                    <input type="hidden" th:value="${version.drawing_data}">
+                    <input type="submit" value="Revert">
+                </form>
+            </li>
+        </ul>
     </div>
 </body>
 </html>
