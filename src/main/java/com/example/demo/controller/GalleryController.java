@@ -74,5 +74,24 @@ public class GalleryController {
         return "galleries/canvaview";
     }
 
+    @GetMapping("/versions/{drawingId}")
+    public String getVersionsList(@PathVariable("drawingId") int drawingId, Model model, HttpSession session) {
+        User user = userService.getUserByUsername((String) session.getAttribute("username"));
+        DrawingObject drawing = drawingObjectService.getDrawingByID(drawingId);
+        if (user == null || drawing == null) return "redirect:/app/dashboard";
+        List<Drawing_versionObject> versions = drawingObjectService.getAllDrawingVersions(drawingId);
+        if (versions == null) return "redirect:/app/dashboard";
+        boolean isAuthorizedRead = drawingObjectService.checkForPermissionReadByUser(user.getId(), drawingId);
+        boolean isAuthorizedWrite = drawingObjectService.checkForPermissionWriteByUser(user.getId(), drawingId);
+        boolean isOwner = (user.getId() == drawingId);
+
+        if (isAuthorizedRead || isAuthorizedWrite || isOwner) {
+            model.addAttribute("drawing", drawing);
+            model.addAttribute("versions", versions);
+        }
+
+        return "galleries/versions";
+    }
+
 
 }

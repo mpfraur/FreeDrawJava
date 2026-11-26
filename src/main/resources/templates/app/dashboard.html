@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Dashboard</title>
@@ -46,11 +46,17 @@
                 <form method="GET" th:action="@{/studio/canva/{id}(id=${drawing.drawingObject().drawing_id})}">
                     <input type="submit" value="Edit">
                 </form>
+                <form method="get" th:action="@{/galleries/versions/{drawingId}(drawingId=${drawing.drawingObject().drawing_id})}">
+                    <input type="submit" value="Versions">
+                </form>
             </li>
             <li th:each="drawing : ${shared}" th:unless="${drawing.perm().permission_type.name() == 'WRITE'}">
                 <span th:text="${drawing.drawingObject().getName()}"></span>
                 <form method="GET" th:action="@{/galleries/canvaview/{id}(id=${drawing.drawingObject().drawing_id})}">
                     <input type="submit" value="view">
+                </form>
+                <form method="get" th:action="@{/galleries/versions/{drawingId}(drawingId=${drawing.drawingObject().drawing_id})}">
+                    <input type="submit" value="Versions">
                 </form>
             </li>
         </ul>
@@ -63,6 +69,10 @@
             <form th:action="@{/app/restore}" method="post">
                 <input type="hidden" th:value="${deletedDrawings.drawing_id}" name="drawingID">
                 <input type="submit" value="Restore">
+            </form>
+            <form th:action="@{/app/harddelete}" method="post" onsubmit="return confirm('WARNING : this will Delete your drawing from the Database, are you sure you want continue?')">
+                <input type="hidden" name="drawingID" th:value="${deletedDrawings.drawing_id}">
+                <input type="submit" value="Hard Delete Drawing">
             </form>
         </ul>
     </div>

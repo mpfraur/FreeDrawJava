@@ -87,8 +87,9 @@ public class DrawingSettingsController {
         return "redirect:/settings/" + drawingId;
     }
 
+    // ----------- Creates a new Drawing copy off a version!
     @PostMapping("/copy")
-    public String createCopyDrawingController(HttpSession session, @RequestParam int drawingId, @RequestParam boolean isPrivate, @RequestParam int versionID, @RequestParam String jsonData) {
+    public String createCopyDrawingController(HttpSession session, @RequestParam int drawingId, @RequestParam(defaultValue = "false") boolean isPrivate, @RequestParam int versionID, @RequestParam String jsonData) {
         User user = userService.getUserByUsername((String) session.getAttribute("username"));
         DrawingObject drawing = drawingObjectService.getDrawingByID(drawingId);
         Drawing_versionObject version = drawingObjectService.getVersionByID(versionID, drawingId);
@@ -97,6 +98,8 @@ public class DrawingSettingsController {
         if (isPrivate) {
             status = DrawingObject.Status.PRIVATE;
         }
+        logger.info("isPrivate received: {}", isPrivate);
+        logger.info("status assigned: {}", status);
         DrawingObject copyOfDrawing = drawingObjectService.createNewDrawingFromPrevDrawing(versionID, drawingId, user.getId(), status);
 
         if (copyOfDrawing != null) {
@@ -107,8 +110,11 @@ public class DrawingSettingsController {
 
         logger.info("User : {} Has Copied {}", user.getUsername(), drawing.getName());
 
+
         return "redirect:/app/dashboard";
     }
+
+    // ----------- HARD delete Drawing
 
 
 }

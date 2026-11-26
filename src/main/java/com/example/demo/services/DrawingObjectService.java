@@ -28,6 +28,8 @@ public class DrawingObjectService {
         this.userRepositoryImpl = userRepositoryImpl;
     }
 
+    // --------------- DRAWING STUFF ------------------------------------- //
+
     public DrawingObject getDrawingByID(int drawingID) {
         return drawingsRepository.findById(drawingID);
     }
@@ -68,6 +70,11 @@ public class DrawingObjectService {
         DrawingObject drawing = drawingsRepository.findById(drawingID);
         drawing.setDeleted_at(LocalDateTime.now());
         drawingsRepository.update(drawing);
+    }
+
+    // ------------- Hard Delete
+    public void hardDeleteDrawing(int drawingId) {
+        drawingsRepository.delete(drawingId);
     }
 
     // ------------ Restore deleted one!

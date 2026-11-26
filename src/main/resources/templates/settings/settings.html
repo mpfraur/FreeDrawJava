@@ -31,6 +31,7 @@
 
             <input type="submit">
         </form>
+
         <p id="Error" th:text="${error}" th:if="${error}"></p>
 
         <ul>
@@ -42,8 +43,6 @@
 
                     <input type="submit" value="Revoke">
                 </form>
-
-
             </li>
         </ul>
 
@@ -54,7 +53,6 @@
                 <form th:action="@{/settings/copy}" method="post">
                     <input type="hidden" th:value="${version.drawing_id}" name="drawingId">
                     <label for="isPrivateCheckbox">Make it Private? </label>
-                    <input type="hidden" name="isPrivate" value="false">
                     <input type="checkbox" name="isPrivate" value="true" id="isPrivateCheckbox">
                     <input type="hidden" th:value="${version.version_id}" name="versionID">
                     <input type="hidden" th:value="${version.drawing_data}" name="jsonData">

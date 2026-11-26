@@ -72,6 +72,17 @@ public class HomeController {
         return "redirect:/app/dashboard";
     }
 
+    // ------- Hard Delete
+    @PostMapping("/harddelete")
+    public String hardDeleteFunc(HttpSession session, @RequestParam int drawingID) {
+        User user = userService.getUserByUsername((String) session.getAttribute("username"));
+        if (user == null) return "redirect:/login";
+        DrawingObject drawing = drawingObjectService.getDrawingByID(drawingID);
+        if (drawing.getUser_id() != user.getId()) return "redirect:/error404";
+        drawingObjectService.hardDeleteDrawing(drawingID);
+        return "redirect:/app/dashboard";
+    }
+
     // ------ create new Drawing
     @PostMapping("/create")
     public String createNewDrawing(@RequestParam String drawingName, @RequestParam(defaultValue = "false") boolean status, HttpSession session) {
@@ -88,6 +99,8 @@ public class HomeController {
         drawingObjectService.createNewDrawing(user.getId(), drawingName, visibility);
         return "redirect:/app/dashboard";
     }
+
+
 
 
 }

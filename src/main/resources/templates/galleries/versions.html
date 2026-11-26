@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Versions of Drawing</title>
+</head>
+<body>
+  <h1 th:text="'Versions of :' + ${drawing.name}"></h1>
+  <ul>
+    <li th:each="version, index : ${versions}">
+      <p th:text="${version.created_at}"></p>
+      <form th:action="@{/settings/copy}" method="post">
+        <input type="hidden" th:value="${version.drawing_id}" name="drawingId">
+        <label for="isPrivateCheckbox">Make it Private? </label>
+        <input type="checkbox" name="isPrivate" value="true" id="isPrivateCheckbox">
+        <input type="hidden" th:value="${version.version_id}" name="versionID">
+        <input type="hidden" th:value="${version.drawing_data}" name="jsonData">
+
+        <input type="submit" value="Copy">
+      </form>
+    </li>
+  </ul>
+</body>
+</html>
