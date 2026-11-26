@@ -30,7 +30,8 @@ public class DrawingsRepositoryImpl implements DrawingsRepository {
                 drawing.getName(),
                 drawing.getStatus().name()
         );
-        return drawing;
+        DrawingObject newDrawing = database.queryForObject("select * from Drawings where drawing_id = last_insert_id()", new BeanPropertyRowMapper<>(DrawingObject.class));
+        return newDrawing;
     }
 
     @Override
@@ -102,7 +103,7 @@ public class DrawingsRepositoryImpl implements DrawingsRepository {
 
     @Override
     public Drawing_versionObject getVersionByID(int drawingId, int versionId) {
-        Drawing_versionObject version = database.queryForObject("select * from Drawing_version where drawing_id = ? and version_id = ? limit 1", new BeanPropertyRowMapper<>(Drawing_versionObject.class), drawingId, versionId);
+        Drawing_versionObject version = database.queryForObject("select * from Drawing_versions where drawing_id = ? and version_id = ? limit 1", new BeanPropertyRowMapper<>(Drawing_versionObject.class), drawingId, versionId);
         return version;
     }
 

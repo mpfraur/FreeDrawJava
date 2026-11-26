@@ -78,9 +78,9 @@ public class DrawingObjectService {
     }
 
     // ------------ create new Drawing
-    public void createNewDrawing(int userID, String name, DrawingObject.Status visibility) {
+    public DrawingObject createNewDrawing(int userID, String name, DrawingObject.Status visibility) {
         DrawingObject drawing = new DrawingObject(userID, name, visibility);
-        drawingsRepository.save(drawing);
+        return drawingsRepository.save(drawing);
     }
 
     // ------------- fetches all Public Drawings
@@ -194,7 +194,7 @@ public class DrawingObjectService {
     }
 
     // ----------- Reverting Drawing on Version ID
-    public void createNewDrawingFromPrevDrawing(int versionDrawingId, int drawingId, int userId, DrawingObject.Status status) {
+    public DrawingObject createNewDrawingFromPrevDrawing(int versionDrawingId, int drawingId, int userId, DrawingObject.Status status) {
         DrawingObject drawing = getDrawingByID(drawingId);
         if (drawing != null) {
             Drawing_versionObject version = drawingsRepository.getVersionByID(drawingId, versionDrawingId);
@@ -202,11 +202,13 @@ public class DrawingObjectService {
             boolean isAuthorizedWrite = checkForPermissionWriteByUser(userId, drawingId);
             boolean isAuthorizedRead = checkForPermissionReadByUser(userId, drawingId);
             boolean isOwner = (userId == drawing.getUser_id());
-
+            DrawingObject newDrawingCopy = null;
             if (isAuthorizedRead || isAuthorizedWrite || isOwner) {
-                createNewDrawing(userId, "Copy of : " + drawing.getName(), status);
+                newDrawingCopy = createNewDrawing(userId, "Copy of : " + drawing.getName(), status);
             }
+            return newDrawingCopy;
         }
+        return null;
     }
 
 

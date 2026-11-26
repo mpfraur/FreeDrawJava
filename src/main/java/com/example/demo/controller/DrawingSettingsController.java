@@ -10,6 +10,8 @@ import com.example.demo.repository.DrawingsRepositoryImpl;
 import com.example.demo.services.DrawingObjectService;
 import com.example.demo.services.UserService;
 import jakarta.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +28,8 @@ public class DrawingSettingsController {
 
     @Autowired
     DrawingObjectService drawingObjectService;
+
+    private static final Logger logger = (Logger) LoggerFactory.getLogger(DrawingSettingsController.class);
 
     // -------------- Settings per Drawing
     @GetMapping("/{drawingID}")
@@ -79,20 +83,29 @@ public class DrawingSettingsController {
         }
         if (drawing == null || drawing.getUser_id() != owner.getId()) return "redirect:/error404";
         drawingObjectService.revokeUserPermission(userId, drawingId);
+        logger.info("User : {} Got his permissions Revoked.", userId);
         return "redirect:/settings/" + drawingId;
     }
 
     @PostMapping("/copy")
-    public String createCopyDrawingController(HttpSession session, @RequestParam int drawingId, @RequestParam boolean isPrivate, @RequestParam int versionID) {
+    public String createCopyDrawingController(HttpSession session, @RequestParam int drawingId, @RequestParam boolean isPrivate, @RequestParam int versionID, @RequestParam String jsonData) {
         User user = userService.getUserByUsername((String) session.getAttribute("username"));
         DrawingObject drawing = drawingObjectService.getDrawingByID(drawingId);
         Drawing_versionObject version = drawingObjectService.getVersionByID(versionID, drawingId);
         if (version == null || user == null || drawing == null) return "redirect:/dashboard";
+        DrawingObject.Status status = DrawingObject.Status.PUBLIC;
         if (isPrivate) {
-           // HERE WORK HERE PLEASE!!!
+            status = DrawingObject.Status.PRIVATE;
         }
-        // drawingObjectService.createNewDrawingFromPrevDrawing(versionID, drawingId, user.getId(), is);
+        DrawingObject copyOfDrawing = drawingObjectService.createNewDrawingFromPrevDrawing(versionID, drawingId, user.getId(), status);
 
+        if (copyOfDrawing != null) {
+            drawingObjectService.createNewVersion(copyOfDrawing.getDrawing_id(), jsonData);
+        } else {
+            logger.error("Error copy of Drawing version is null");
+        }
+
+        logger.info("User : {} Has Copied {}", user.getUsername(), drawing.getName());
 
         return "redirect:/app/dashboard";
     }

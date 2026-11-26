@@ -51,9 +51,15 @@
         <ul>
             <li th:each="version, index : ${versions}">
                 <p th:text="${index.count} + 'Created at : ' + ${version.created_at}"></p>
-                <form action="">
-                    <input type="hidden" th:value="${version.drawing_data}">
-                    <input type="submit" value="Revert">
+                <form th:action="@{/settings/copy}" method="post">
+                    <input type="hidden" th:value="${version.drawing_id}" name="drawingId">
+                    <label for="isPrivateCheckbox">Make it Private? </label>
+                    <input type="hidden" name="isPrivate" value="false">
+                    <input type="checkbox" name="isPrivate" value="true" id="isPrivateCheckbox">
+                    <input type="hidden" th:value="${version.version_id}" name="versionID">
+                    <input type="hidden" th:value="${version.drawing_data}" name="jsonData">
+
+                    <input type="submit" value="Copy">
                 </form>
             </li>
         </ul>
