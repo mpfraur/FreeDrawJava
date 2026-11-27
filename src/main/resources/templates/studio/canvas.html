@@ -10,7 +10,7 @@
 
 <div>
     <h1>Canva</h1>
-    <h2 class="mb-3">ID: <span th:text="${drawingID}"></span></h2>
+    <h2 class="mb-3">ID: <span th:text="${drawingID}" id="drawingId"></span></h2>
 
     <p hidden>drawing Data print: <span th:text="${JSON_test_print}" id="JsonString"></span></p>
 
@@ -61,6 +61,8 @@
 <script type="module" src="/script.js"></script>
 <script type="module" src="/modules.js"></script>
 <script type="module" src="/navigation.js"></script>
+<script type="module" src="/autoSave.js"></script>
+
 
 </body>
 </html>

@@ -200,7 +200,7 @@ public class DrawingObjectService {
         return drawingsRepository.getVersionByID(drawingId, versionId);
     }
 
-    // ----------- Reverting Drawing on Version ID
+    // ----------- Creates copy of Drawing on Version ID
     public DrawingObject createNewDrawingFromPrevDrawing(int versionDrawingId, int drawingId, int userId, DrawingObject.Status status) {
         DrawingObject drawing = getDrawingByID(drawingId);
         if (drawing != null) {
@@ -216,6 +216,15 @@ public class DrawingObjectService {
             return newDrawingCopy;
         }
         return null;
+    }
+
+    // --------------- Reverts Drawing into a version version
+    public void revertToOldDrawingVersion(int drawingId, int versionId) {
+        DrawingObject drawing = getDrawingByID(drawingId);
+        Drawing_versionObject version = getVersionByID(versionId,drawingId);
+        if (drawing != null && version != null && version.getDrawing_data() != null) {
+            createNewVersion(drawingId, version.getDrawing_data());
+        }
     }
 
 

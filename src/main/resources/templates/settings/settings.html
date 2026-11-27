@@ -49,7 +49,7 @@
         <h3>Drawing Versions</h3>
         <ul>
             <li th:each="version, index : ${versions}">
-                <p th:text="${index.count} + 'Created at : ' + ${version.created_at}"></p>
+                <p th:text="${index.count} + ' Created at: ' + ${version.created_at}"></p>
                 <form th:action="@{/settings/copy}" method="post">
                     <input type="hidden" th:value="${version.drawing_id}" name="drawingId">
                     <label for="isPrivateCheckbox">Make it Private? </label>
@@ -59,8 +59,15 @@
 
                     <input type="submit" value="Copy">
                 </form>
+                <form method="post" th:action="@{/settings/revert}">
+                    <input type="hidden" name="drawingId" th:value="${drawing.drawing_id}">
+                    <input type="hidden" name="versionId" th:value="${version.version_id}">
+                    <input type="submit" value="Revert Drawing to this version">
+                </form>
             </li>
         </ul>
     </div>
+    <script type="module" src="/navigation.js"></script>
+
 </body>
 </html>

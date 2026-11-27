@@ -1,3 +1,6 @@
+import { autoSave } from "./autoSave.js";
+window.autoSave = autoSave;
+
 const controls = {
     sizeOfShape: document.getElementById("sizeOfShape"),
     color: document.getElementById("color"),
@@ -428,9 +431,6 @@ if (sendBoardBtn) {
 // -----------------------------------------------------------------------------------------------------------------------------//
 
 
-
-
-
 let history = [];
 createInstanceHistory(board);
 
@@ -511,9 +511,15 @@ function createHistoryRecordDocument() {
     }
 }
 
+// ------------ Auto save make sure import
+setInterval(() => {
+    console.log("INTERVAL FIRED");
+    autoSave(board.drawsList);
+}, 60000);
+
 
 window.goBackToSnapShotHistory = goBackToSnapShotHistory;
-
+window.board = board;
 
 
 

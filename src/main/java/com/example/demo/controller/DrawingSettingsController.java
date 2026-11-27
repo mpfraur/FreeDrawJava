@@ -114,7 +114,18 @@ public class DrawingSettingsController {
         return "redirect:/app/dashboard";
     }
 
-    // ----------- HARD delete Drawing
+    // ------------- Revert Drawing to prev Version
+    @PostMapping("/revert")
+    public String revertToPrevDrawingController(@RequestParam int drawingId, @RequestParam int versionId, HttpSession session) {
+        User user = userService.getUserByUsername((String) session.getAttribute("username"));
+        DrawingObject drawing = drawingObjectService.getDrawingByID(drawingId);
+        Drawing_versionObject version = drawingObjectService.getVersionByID(versionId, drawingId);
+        if (user == null || drawing == null || version == null) return "redirect:/app/dashboard";
+        boolean isOwner = (user.getId() == drawing.getUser_id());
+        if (isOwner) {
+            drawingObjectService.revertToOldDrawingVersion(drawingId, versionId);
+        }
 
-
+        return "redirect:/app/dashboard";
+    }
 }
